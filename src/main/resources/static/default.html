@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Cache-Control" content="max-age=72000"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="applicable-device" content="pc,mobile">
+    <meta name="MobileOptimized" content="width"/>
+    <meta name="HandheldFriendly" content="true"/>
+    <link rel="shortcut icon" href="img/logo.png">
+    <meta name="description" content="风吟博客,一个简洁的Java博客,言曌程序学习的一个新起点。"/>
+    <meta name="keywords" content="风吟,风吟博客,Java博客,SSM博客,言曌,言曌博客"/>
+    <title>风吟博客</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="./plugin/layui/css/layui.css">
+    <link rel="stylesheet" href="plugin/font-awesome/font-awesome/css/font-awesome.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+<div id="page" class="site" style="transform: none;">
+
+    <all-header></all-header>
+    <all-search></all-search>
+    <all-notice></all-notice>
+
+    <div id="content" class="site-content" style="transform: none;">
+
+        <!-- 文章列表        -->
+        <all-content></all-content>
+
+        <!-- 侧边栏       -->
+        <div id="sidebar" class="widget-area all-sidebar"
+             style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
+
+            <about-me></about-me>
+            <site-profile></site-profile>
+            <tag-list></tag-list>
+            <recent-comments></recent-comments>
+        </div>
+
+    </div>
+
+</div>
+
+<footer id="colophon" class="site-footer" role="contentinfo">
+    <all-footer></all-footer>
+</footer><!-- .site-footer -->
+
+</body>
+<script type="text/javascript" src="./js/vue.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/superfish.js"></script>
+<script src='js/sticky.js'></script>
+<script src="js/script.js"></script>
+<script src="plugin/layui/layui.all.js"></script>
+<script src="js/axios.js"></script>
+<script type="module">
+
+    import allHeader from "./module/home/header.js";
+    import allSearch from "./module/home/search.js";
+    import allNotice from "./module/home/notice.js";
+    import allContent from "./module/home/content.js";
+    import aboutMe from "./module/home/aboutMe.js";
+    import siteProfile from "./module/home/siteProfile.js";
+    import tagList from "./module/home/tagList.js";
+    import comments from "./module/home/comments.js";
+    import allFooter from "./module/home/footer.js";
+
+    var page = new Vue({
+        el: '#page',
+        component: allHeader, allSearch, allNotice, allContent, aboutMe, siteProfile, tagList, comments
+    });
+
+    var footer = new Vue({
+        el: "#colophon",
+        component: allFooter
+
+    });
+
+
+</script>
+</html>

@@ -1,0 +1,56 @@
+package ${package.Mapper};
+
+import ${package.Entity}.${table.entityName};
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.stereotype.Repository;
+
+/**
+ * <p>
+ * ${table.name} dao层
+ * </p>
+ *
+ * @author ${author}
+ * @date ${date}
+ */
+
+@Repository
+public interface ${table.MapperName} {
+        /**
+         * 根据主键删除 数据库 的记录, ${table.name}
+         * @author ${author}
+         * @date ${date}
+         */
+        int deleteByPrimaryKey(Long id);
+
+        /**
+         * 新写入数据库记录, ${table.name}
+         * @author ${author}
+         * @date ${date}
+         */
+        int insert(${table.entityName} record);
+
+        /**
+         * 根据指定主键获取一条数据库记录, ${table.name}
+         * @author ${author}
+         * @date ${date}
+         */
+    ${table.entityName} selectByPrimaryKey(Long id);
+
+        /**
+         * 根据主键来更新符合条件的数据库记录, ${table.name}
+         * @author ${author}
+         * @date ${date}
+         */
+        int updateByPrimaryKey(${table.entityName} record);
+
+        /**
+         * 根据条件分页查询(计数)
+         * @author ${author}
+         * @date ${date}
+         * */
+        long countForPage(Map<String, Object> searchMap);
+
+        }
+

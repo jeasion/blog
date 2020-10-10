@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Cache-Control" content="max-age=72000"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="applicable-device" content="pc,mobile">
+    <meta name="MobileOptimized" content="width"/>
+    <meta name="HandheldFriendly" content="true"/>
+    <link rel="shortcut icon" href="../img/logo.png">
+    <meta name="description" content="风吟博客,一个简洁的Java博客,言曌程序学习的一个新起点。"/>
+    <meta name="keywords" content="风吟,风吟博客,Java博客,SSM博客,言曌,言曌博客"/>
+    <title>Integer与int的种种比较你知道多少？</title>
+<link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../plugin/font-awesome/font-awesome/css/font-awesome.css">
+
+    <link rel="stylesheet" href="../css/highlight.css">
+        <style>
+            .entry-title {
+                background: #f8f8f8;
+            }
+        </style>
+    </head>
+<body>
+<div id="page" class="site" style="transform: none;">
+
+    <header id="masthead" class="site-header">
+    <nav id="top-header">
+        <div class="top-nav">
+            <div class="user-login">
+                <a href="http://localhost:8081/admin">登录</a>
+                    <a href="https://liuyanzhao.com/bulletin/my-service" target="_blank" style="color:red;">毕设代做/有偿服务</a>
+            </div>
+            <div class="menu-topmenu-container">
+                <ul id="menu-topmenu" class="top-menu">
+                    <li class="menu-item">
+                        </li>
+                    <li class="menu-item">
+                        <a href="../applyLink.htm" >
+                                    <i class="fa fa-link"></i>
+                                    <span class="font-text">申请友链&nbsp;</span>&nbsp;
+                                </a>
+                            </li>
+                    <li class="menu-item">
+                        <a href="../articleFile.htm" >
+                                    <i class="fa-list-alt fa"></i>
+                                    <span class="font-text">文章归档&nbsp;</span>&nbsp;
+                                </a>
+                            </li>
+                    <li class="menu-item">
+                        </li>
+                    <li class="menu-item">
+                        <a href="../aboutSite.htm" >
+                                    <i class="fa fa-info"></i>
+                                    <span class="font-text">关于本站&nbsp;</span>&nbsp;
+                                </a>
+                            </li>
+                    </ul>
+            </div>
+        </div>
+    </nav><!-- #top-header -->
+    <div id="menu-box">
+        <div id="top-menu">
+                <span class="nav-search">
+                    <i class="fa fa-search"></i>
+                </span>
+            <div class="logo-site"><h1 class="site-title">
+                <a href="../default.html" title="风吟博客">风吟博客</a>
+            </h1>
+                <p class="site-description">莫问收获，但问耕耘。</p>
+            </div><!-- .logo-site -->
+            <div id="site-nav-wrap">
+                <div id="sidr-close">
+                    <a href="10.htm#sidr-close" class="toggle-sidr-close">×</a>
+                </div>
+                <nav id="site-nav" class="main-nav">
+                    <a href="10.htm#sidr-main" id="navigation-toggle" class="bars">
+                        <i class="fa fa-bars"></i>
+                    </a>
+                    <div class="menu-pcmenu-container">
+                        <ul id="menu-pcmenu" class="down-menu nav-menu sf-js-enabled sf-arrows">
+
+                            <li>
+                                <a href="../default.html">
+                                    <i class="fa-home fa"></i>
+                                    <span class="font-text">首页</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                        <a href="../category/1.htm">
+                                            <i class="fa fa-coffee"></i>
+                                            <span class="font-text">Java&nbsp;</span>
+                                        </a>
+                                        <ul class="sub-menu">
+                                            <li>
+                                                        <a href="../category/2.htm" target="_blank">Java基础</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/3.htm" target="_blank">Core Java</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/4.htm" target="_blank">多线程并发编程</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/5.htm" target="_blank">Sockets和IO</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/6.htm" target="_blank">设计模式和反射</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/7.htm" target="_blank">JVM</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/8.htm" target="_blank">JavaWeb</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/9.htm" target="_blank">Java框架</a>
+                                                    </li>
+                                                </ul>
+                                    </li>
+                                <li>
+                                        <a href="../category/10.htm">
+                                            <i class="fa fa-cubes"></i>
+                                            <span class="font-text">计算机科学&nbsp;</span>
+                                        </a>
+                                        <ul class="sub-menu">
+                                            <li>
+                                                        <a href="../category/11.htm" target="_blank">数据结构和算法</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/12.htm" target="_blank">操作系统</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/13.htm" target="_blank">数据库</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/14.htm" target="_blank">计算机网络</a>
+                                                    </li>
+                                                </ul>
+                                    </li>
+                                <li>
+                                        <a href="../category/15.htm">
+                                            <i class="fa-snowflake-o fa"></i>
+                                            <span class="font-text">其他技术&nbsp;</span>
+                                        </a>
+                                        <ul class="sub-menu">
+                                            <li>
+                                                        <a href="../category/16.htm" target="_blank">消息服务</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/17.htm" target="_blank">缓存服务</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/100000003.htm" target="_blank">微服务</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/100000004.htm" target="_blank">搜索引擎</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/100000005.htm" target="_blank">权限框架</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/100000006.htm" target="_blank">开发利器</a>
+                                                    </li>
+                                                </ul>
+                                    </li>
+                                <li>
+                                        <a href="https://leetcode.com/problemset/all">
+                                            <i class="ssss"></i>
+                                            <span class="font-text">LeetCode&nbsp;</span>
+                                        </a>
+                                    </li>
+                                <li>
+                                        <a href="../message.htm">
+                                            <i class="fa fa-comment"></i>
+                                            <span class="font-text">留言板&nbsp;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                    </div>
+                </nav>
+            </div>
+            <div class="clear"></div>
+        </div><!-- #top-menu -->
+    </div><!-- #menu-box -->
+    </header><!-- #masthead -->
+<div id="search-main">
+    <div class="searchbar">
+        <form method="get" id="searchform" action="http://localhost:8081/search" accept-charset="UTF-8">
+            <span>
+                <input type="text" value="" name="keywords" id="s" placeholder="输入搜索内容"required="">
+                <button type="submit" id="searchsubmit">搜索</button>
+            </span>
+        </form>
+    </div>
+    <div class="clear"></div>
+</div>
+<nav class="breadcrumb">
+        <a class="crumbs" href="../default.html">
+            <i class="fa fa-home"></i>首页
+        </a>
+        <i class="fa fa-angle-right"></i>
+                    <a href="../category/1.htm">
+                            Java</a>
+                <i class="fa fa-angle-right"></i>
+                    <a href="../category/2.htm">
+                            Java基础</a>
+                <i class="fa fa-angle-right"></i>
+        正文
+    </nav>
+    <div id="content" class="site-content" style="transform: none;">
+        <div id="primary" class="content-area">
+        <main id="main" class="site-main" role="main">
+            <article class="post" id="articleDetail" data-id="10">
+                <header class="entry-header">
+                    <h1 class="entry-title">
+                            Integer与int的种种比较你知道多少？</h1>
+                </header><!-- .entry-header -->
+                <div class="entry-content">
+                    <div class="single-content">
+                            <p>如果面试官问Integer与int的区别：估计大多数人只会说道两点，Ingeter是int的包装类，int的初值为0，Ingeter的初值为null。但是如果面试官再问一下Integer a = 1;int b&nbsp;= 1; a==b为true还是为false？估计就有一部分人答不出来了，如果再问一下其他的，估计更多的人会头脑一片混乱。所以我对它们进行了总结，希望对大家有帮助。</p><p><strong>首先看代码：</strong></p><div class="dp-highlighter"><div class="bar"></div><ol class="dp-j" start="1"><li class="alt"><span class="comment">/*&nbsp;</span></li><li class=""><span class="comment">&nbsp;*&nbsp;@author&nbsp;LiuYanzhao</span></li><li class="alt"><span class="comment">&nbsp;*</span></li><li class=""><span class="comment">&nbsp;*/</span></li><li class="alt"><span class="keyword">public</span>&nbsp;<span class="keyword">class</span>&nbsp;Test&nbsp;{</li><li class=""></li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span>&nbsp;<span class="keyword">static</span>&nbsp;<span class="keyword">void</span>&nbsp;main(String[]&nbsp;args)&nbsp;{</li><li class=""></li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span>&nbsp;i&nbsp;=&nbsp;<span class="number">128</span>;</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Integer&nbsp;i2&nbsp;=&nbsp;<span class="number">128</span>;</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Integer&nbsp;i3&nbsp;=&nbsp;<span class="keyword">new</span>&nbsp;Integer(<span class="number">128</span>);</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//Integer会自动拆箱为int，所以为true</span></li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(i&nbsp;==&nbsp;i2);<span class="comment">//true</span></li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(i&nbsp;==&nbsp;i3);<span class="comment">//true</span></li><li class="alt"></li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//java在编译的时候,被翻译成-&gt;&nbsp;Integer&nbsp;i5&nbsp;=&nbsp;Integer.valueOf(127);</span></li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Integer&nbsp;i5&nbsp;=&nbsp;<span class="number">127</span>;</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Integer&nbsp;i6&nbsp;=&nbsp;<span class="number">127</span>;</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(i5&nbsp;==&nbsp;i6);<span class="comment">//true</span></li><li class=""></li><li class="alt"></li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Integer&nbsp;i7&nbsp;=&nbsp;<span class="number">128</span>;</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Integer&nbsp;i8&nbsp;=&nbsp;<span class="number">128</span>;</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(i7&nbsp;==&nbsp;i8);<span class="comment">//false</span></li><li class="alt"></li><li class=""></li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Integer&nbsp;i9&nbsp;=&nbsp;<span class="keyword">new</span>&nbsp;Integer(<span class="number">127</span>);</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Integer&nbsp;i10&nbsp;=&nbsp;<span class="number">127</span>;</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(i9&nbsp;==&nbsp;i10);&nbsp;<span class="comment">//false</span></li><li class=""></li><li class="alt"></li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Integer&nbsp;i11&nbsp;=&nbsp;<span class="keyword">new</span>&nbsp;Integer(<span class="number">128</span>);</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Integer&nbsp;i12&nbsp;=&nbsp;<span class="keyword">new</span>&nbsp;Integer(<span class="number">123</span>);</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(i11&nbsp;==&nbsp;i12);&nbsp;&nbsp;<span class="comment">//false</span></li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;}</li><li class=""></li><li class="alt">}</li></ol></div><p><strong>详解如下：</strong></p><p>首先，13行和14行输出结果都为true,因为Integer和int比都会自动拆箱（jdk1.5以上）。</p><p>19行的结果为true,而24行则为false,很多人都不懂为什么。其实java在编译Integer i5 = 127的时候,被翻译成-&gt; Integer i5 = Integer.valueOf(127);所以关键就是看valueOf()函数了。只要看看valueOf()函数的源码就会明白了。JDK源码的valueOf函数式这样的：</p><div class="dp-highlighter"><div class="bar"></div><ol class="dp-j" start="1"><li class="alt"><span class="keyword">public</span>&nbsp;<span class="keyword">static</span>&nbsp;Integer&nbsp;valueOf(<span class="keyword">int</span>&nbsp;i)&nbsp;{</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">assert</span>&nbsp;IntegerCache.high&nbsp;&gt;=&nbsp;<span class="number">127</span>;</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span>&nbsp;(i&nbsp;&gt;=&nbsp;IntegerCache.low&nbsp;&amp;&amp;&nbsp;i&nbsp;&lt;=&nbsp;IntegerCache.high)</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span>&nbsp;IntegerCache.cache[i&nbsp;+&nbsp;(-IntegerCache.low)];</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span>&nbsp;<span class="keyword">new</span>&nbsp;Integer(i);</li><li class="">}</li></ol></div><p>看一下源码大家都会明白，对于-128到127之间的数，会进行缓存，Integer i5 = 127时，会将127进行缓存，下次再写Integer i6 = 127时，就会直接从缓存中取，就不会new了。所以22行的结果为true,而25行为false。</p><p>对于29行和34行，因为对象不一样，所以为false。</p><p>我对于以上的情况总结如下：</p><p>① 无论如何，<span><strong>Integer与new Integer不会相等</strong></span>。不会经历拆箱过程，i3的引用指向堆，而i4指向专门存放他的内存（常量池），他们的内存地址不一样，所以为false</p><p>②&nbsp;<strong><span>两个都是非new出来的Integer，如果数在-128到127之间，则是true,否则为false</span></strong></p><p>java在编译Integer i2 = 128的时候,被翻译成-&gt; Integer i2 = Integer.valueOf(128);而valueOf()函数会对-128到127之间的数进行缓存</p><p>③&nbsp;<strong><span>两</span><span>个都是new出来的,都为false</span></strong></p><p>④&nbsp;<strong><span>int和Integer(无论new否)比，都为true</span></strong>，因为会把Integer自动拆箱为int再去比</p><p>&nbsp;</p><p>参考：<a href="https://liuyanzhao.com/wp-content/themes/begin/inc/go.php?url=http://www.cnblogs.com/liuling/archive/2013/05/05/intAndInteger.html" target="_blank" rel="noopener noreferrer">http://www.cnblogs.com/liuling/archive/2013/05/05/intAndInteger.html</a></p><div><br></div></div>
+                    <div class="s-weixin">
+                        <ul class="weimg1">
+                            <li><strong>微信</strong></li>
+                            <li>赶快加我聊天吧</li>
+                            <li><img src="../img/weixin.jpg"></li>
+                        </ul>
+                        <ul class="weimg2">
+                            <li><strong>博客交流群</strong></li>
+                            <li>海纳百川，大家来水</li>
+                            <li><img src="../img/qqGroup.jpg" alt="weinxin"></li>
+                        </ul>
+                        <div class="clear"></div>
+                    </div>
+                    <div class="clear"></div>
+                    <div id="social">
+                        <div class="social-main">
+                            <span class="like">
+                                <a href="javascript:;" data-action="ding" data-id="1" title="点赞"
+                                   class="favorite" onclick="increaseLikeCount()">
+                                    <i class="fa fa-thumbs-up"></i>赞
+                                    <i class="count"
+                                       id="count-10">1</i>
+                                </a>
+                            </span>
+                            <div class="shang-p">
+                                <div class="shang-empty"><span></span></div>
+                                <span class="shang-s">
+                                    <a onclick="PaymentUtils.show();" style="cursor:pointer">赏</a>
+                                </span>
+                            </div>
+                            <div class="share-sd">
+                                        <span class="share-s" style="margin-top: 25px!important;">
+                                            <a href="javascript:void(0)" id="share-s" title="分享">
+                                                <i class="fa fa-share-alt"></i>分享
+                                            </a>
+                                        </span>
+                                <div id="share">
+                                    <ul class="bdsharebuttonbox bdshare-button-style1-16" data-bd-bind="1503997585792">
+                                        <li><a title="更多" class="bds_more fa fa-plus-square" data-cmd="more"
+                                               onclick="return false;" href="10.htm#"></a></li>
+                                        <li><a title="分享到QQ空间" class="fa fa-qq" data-cmd="qzone" onclick="return false;"
+                                               href="10.htm#"></a></li>
+                                        <li><a title="分享到新浪微博" class="fa fa-weibo" data-cmd="tsina"
+                                               onclick="return false;" href="10.htm#"></a></li>
+                                        <li><a title="分享到腾讯微博" class="fa fa-pinterest-square" data-cmd="tqq"
+                                               onclick="return false;" href="10.htm#"></a></li>
+                                        <li><a title="分享到人人网" class="fa fa-renren" data-cmd="renren"
+                                               onclick="return false;" href="10.htm#"></a></li>
+                                        <li><a title="分享到微信" class="fa fa-weixin" data-cmd="weixin"
+                                               onclick="return false;" href="10.htm#"></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+
+                    <footer class="single-footer">
+                        <ul class="single-meta">
+                            <li class="comment">
+                                <a href="10.htm#comments"
+                                   rel="external nofollow">
+                                    <i class="fa fa-comment-o"></i>
+                                    <i class="comment-count">1</i>
+                                </a>
+                            </li>
+                            <li class="views">
+                                <i class="fa fa-eye"></i> <span
+                                    class="articleViewCount">1</span>
+                                views
+                            </li>
+                            <li class="r-hide">
+                                <a href="javascript:pr()" title="侧边栏">
+                                    <i class="fa fa-caret-left"></i>
+                                    <i class="fa fa-caret-right"></i>
+                                </a>
+                            </li>
+                        </ul>
+                        <ul id="fontsize">
+                            <li>A+</li>
+                        </ul>
+                        <div class="single-cat-tag">
+                            <div class="single-cat">所属分类：
+                                <a href="../category/1.htm">
+                                            Java</a>
+                                <a href="../category/2.htm">
+                                            Java基础</a>
+                                </div>
+                        </div>
+                    </footer><!-- .entry-footer -->
+
+
+                    <div class="clear"></div>
+                </div><!-- .entry-content -->
+            </article><!-- #post -->
+
+                <div class="single-tag">
+                <ul class="" data-wow-delay="0.3s">
+                    <li>
+                            <a href="../index.htm" rel="tag"
+                               style="background:#666666">
+                                    Java</a>
+                        </li>
+                    </ul>
+            </div>
+                <div class="authorbio wow fadeInUp">
+                <img alt="言曌" src="http://localhost:8081/uploads/2017/10/20171006225356181.jpg"
+                     class="avatar avatar-64 photo" height="64" width="64">
+                <ul class="postinfo">
+                    <li></li>
+                    <li><strong>版权声明：</strong>本站原创文章，于2017-10-07，由
+                        <strong>
+                                言曌</strong>
+                        发表。
+                    </li>
+                    <li class="reprinted"><strong>转载请注明：</strong>
+                        <a href="10.htm"
+                           rel="bookmark"
+                           title="本文固定链接 /article/10">
+                                Integer与int的种种比较你知道多少？ | 风吟博客</a>
+                    </li>
+                </ul>
+                <div class="clear"></div>
+            </div>
+                <div id="single-widget">
+                <div class="wow fadeInUp" data-wow-delay="0.3s">
+                    <aside id="related_post-2" class="widget">
+                        <h3 class="widget-title">
+                            <span class="s-icon"></span>相关文章
+                        </h3>
+                        <div id="related_post_widget">
+                            <ul>
+                                <li>
+                                        <a href="14.htm">execute、executeUpdate、executeQuery三者的区别</a>
+                                    </li>
+                                <li>
+                                        <a href="17.htm">java中ImageIcon路径问题</a>
+                                    </li>
+                                <li>
+                                        <a href="17.htm">java中ImageIcon路径问题</a>
+                                    </li>
+                                <li>
+                                        <a href="16.htm">Java中File类的使用</a>
+                                    </li>
+                                <li>
+                                        <a href="16.htm">Java中File类的使用</a>
+                                    </li>
+                                </ul>
+                        </div>
+                        <div class="clear"></div>
+                    </aside>
+                        <aside id="hot_post-8" class="widget hot_post">
+                        <h3 class="widget-title"><span class="s-icon"></span>猜你喜欢</h3>
+                        <div id="hot_post_widget">
+                            <ul>
+                                <li>
+                                        <a href="1.htm">
+                                                [转载]SpringMVC中使用Interceptor拦截器</a>
+                                    </li>
+                                <li>
+                                        <a href="2.htm">
+                                                springmvc 表单中文乱码解决方案</a>
+                                    </li>
+                                <li>
+                                        <a href="4.htm">
+                                                [转载]HTTP的幂等性</a>
+                                    </li>
+                                <li>
+                                        <a href="33.htm">
+                                                MySQL常用命令语句</a>
+                                    </li>
+                                <li>
+                                        <a href="11.htm">
+                                                Java如何让程序一直运行，不停止</a>
+                                    </li>
+                                </ul>
+                        </div>
+                        <div class="clear"></div>
+                    </aside>
+                        </div>
+                <div class="clear"></div>
+            </div>
+                <nav class="nav-single">
+                <a href="1.htm" rel="next">
+                            <span class="meta-nav">
+                                <span class="post-nav">上一篇
+                                 <i class="fa fa-angle-left"></i>
+                                </span>
+                                <br>[转载]SpringMVC中使用Interceptor拦截器</span>
+                        </a>
+                    <a href="11.htm" rel="next">
+                            <span class="meta-nav">
+                                <span class="post-nav">下一篇
+                                 <i class="fa fa-angle-right"></i>
+                                </span>
+                                <br>Java如何让程序一直运行，不停止</span>
+                        </a>
+                    <div class="clear"></div>
+            </nav>
+                <div class="scroll-comments"></div>
+            <div id="comments" class="comments-area">
+                <div id="respond" class="comment-respond">
+                    <h3 id="reply-title" class="comment-reply-title"><span id="reply-title-word">发表评论</span>
+                        <a rel="nofollow" id="cancel-comment-reply-link"
+                           href="10.htm#respond"
+                           style="">取消回复</a>
+                    </h3>
+                    <form id="comment_form" method="post">
+                        <p class="comment-form-comment">
+                            <textarea id="comment" name="commentContent" rows="4" tabindex="1" required></textarea>
+                        </p>
+                        <div id="comment-author-info">
+                            <input type="hidden" name="commentPid" value="0">
+                            <input type="hidden" name="commentPname" value="">
+                            <input type="hidden" name="commentRole" value="0">
+                                <p class="comment-form-author">
+                                    <label for="author_name">
+                                        昵称<span class="required">*</span>
+                                    </label>
+                                    <input type="text" name="commentAuthorName" id="author_name" class="" value=""
+                                           tabindex="2" required>
+                                </p>
+                                <p class="comment-form-email">
+                                    <label for="author_email">
+                                        邮箱<span class="required">*</span>
+                                    </label>
+                                    <input type="email" name="commentAuthorEmail" id="author_email" class="" value=""
+                                           tabindex="3" required>
+                                </p>
+                                <p class="comment-form-url">
+                                    <label for="author_url">网址</label>
+                                    <input type="url" name="commentAuthorUrl" id="author_url" class="" value=""
+                                           tabindex="4">
+                                </p>
+                            </div>
+                        <div class="clear"></div>
+                        <p class="form-submit">
+                            <input id="submit" name="submit" type="submit" tabindex="5" value="提交评论">
+                            <input type="hidden" name="commentArticleId"
+                                   value="10" id="article_id">
+                            <input type="hidden" name="commentPid" id="comment_pid" value="0">
+                        </p>
+                    </form>
+                </div>
+
+                <ol class="comment-list">
+                    <li class="comments-anchor">
+                                <ul id="anchor-comment-10"></ul>
+                            </li>
+                            <li class="comment">
+                                <div id="div-comment-10" class="comment-body">
+                                    <div class="comment-author vcard">
+                                        <img class="avatar" src="10.htm" alt="avatar"
+                                             style="display: block;">
+                                        <strong>言曌</strong>
+                                        <i class="fa fa-black-tie" style="color: #c40000;"></i>
+                                            <span class=""
+                                                  style="margin-top: 2px!important;color: #c40000;font-size: 13px;;"><b>博主</b></span>
+                                        <span class="comment-meta commentmetadata">
+                                            <span class="ua-info" style="display: inline;">
+                                                <br>
+                                                <span class="comment-aux">
+                                                    <span class="reply">
+                                                        <a rel="nofollow" class="comment-reply-link" href="10.htm#respond"
+                                                           onclick="replyComment()">回复
+                                                        </a>
+                                                    </span>
+                                                    2017年10月07日 16:12:15&nbsp;
+                                                    <span class="floor"> &nbsp;1楼 </span>
+                                                </span>
+                                            </span>
+                                        </span>
+                                        <p>
+                                            博主测试</p>
+                                    </div>
+                                </div>
+                                <ul class="children">
+                                    </ul>
+                            </li>
+                        </ol>
+            </div>
+                </main>
+        <!-- .site-main -->
+    </div>
+    <div id="sidebar" class="widget-area all-sidebar"
+     style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
+
+        <aside class="widget widget_search">
+            <div class="searchbar">
+                <form method="get" id="searchform1" action="http://localhost:8081/search">
+                    <span> <input type="text" value="" name="keywords" id="s1" placeholder="输入搜索内容" required="">
+                        <button type="submit" id="searchsubmit1">搜索</button>
+                    </span>
+                </form>
+            </div>
+            <div class="clear"></div>
+        </aside>
+        <aside class="widget hot_comment" >
+            <h3 class="widget-title">
+                <i class="fa fa-bars"></i>热评文章
+            </h3>
+            <div id="hot_comment_widget">
+                <ul>
+                    <li>
+                            <a href="17.htm" rel="bookmark" title=" (5条评论)">
+                                    java中ImageIcon路径问题</a>
+                        </li>
+                    <li>
+                            <a href="14.htm" rel="bookmark" title=" (3条评论)">
+                                    execute、executeUpdate、executeQuery三者的区别</a>
+                        </li>
+                    <li>
+                            <a href="13.htm" rel="bookmark" title=" (3条评论)">
+                                    sql语句分为三类(DML,DDL,DCL)-介绍</a>
+                        </li>
+                    <li>
+                            <a href="8.htm" rel="bookmark" title=" (3条评论)">
+                                    Mybatis高级映射多对多查询</a>
+                        </li>
+                    <li>
+                            <a href="11.htm" rel="bookmark" title=" (2条评论)">
+                                    Java如何让程序一直运行，不停止</a>
+                        </li>
+                    <li>
+                            <a href="9.htm" rel="bookmark" title=" (2条评论)">
+                                    Servlet 实现验证码</a>
+                        </li>
+                    <li>
+                            <a href="6.htm" rel="bookmark" title=" (2条评论)">
+                                    Hibernate 简单的CURD操作</a>
+                        </li>
+                    <li>
+                            <a href="2.htm" rel="bookmark" title=" (2条评论)">
+                                    springmvc 表单中文乱码解决方案</a>
+                        </li>
+                    </ul>
+            </div>
+            <div class="clear"></div>
+        </aside>
+        <aside class="widget">
+            <h3 class="widget-title">
+                <i class="fa fa-bars"></i>所有标签
+            </h3>
+            <div class="tagcloud">
+                <a href="../index.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Java</a>
+                <a href="../tag/2.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            算法</a>
+                <a href="../tag/3.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            数据结构</a>
+                <a href="../tag/4.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            C</a>
+                <a href="../tag/5.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            操作系统</a>
+                <a href="../tag/6.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            计算机网络</a>
+                <a href="../tag/8.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            面试题</a>
+                <a href="../tag/9.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            数据库</a>
+                <a href="../tag/10.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            MySQL</a>
+                <a href="../tag/11.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Spring</a>
+                <a href="../tag/12.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            SpringMVC</a>
+                <a href="../tag/13.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            MyBatis</a>
+                <a href="../tag/14.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            JVM</a>
+                <a href="../tag/15.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            设计模式</a>
+                <a href="../tag/16.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            网络编程</a>
+                <a href="../tag/17.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            IO</a>
+                <a href="../tag/18.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            JSP</a>
+                <a href="../tag/19.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Servlet</a>
+                <a href="../tag/20.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            JavaWeb</a>
+                <a href="../tag/21.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Hibernate</a>
+                <a href="../tag/22.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            SQL</a>
+                <a href="../tag/24.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Redis</a>
+                <a href="../tag/25.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            SPA</a>
+                <a href="../tag/26.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            SpringCloud</a>
+                <a href="../tag/27.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Dubbo</a>
+                <a href="../tag/28.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            EDAS</a>
+                <a href="../tag/29.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            MongoDB</a>
+                <a href="../tag/31.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            SpringBoot</a>
+                <a href="../tag/32.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            ElasticSearch</a>
+                <a href="../tag/33.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Docker</a>
+                <a href="../tag/34.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Jenkins</a>
+                <a href="../tag/35.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Vue</a>
+                <a href="../tag/36.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            IDEA</a>
+                <a href="../tag/37.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Shiro</a>
+                <a href="../tag/38.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            RocketMQ</a>
+                <div class="clear"></div>
+            </div>
+            <div class="clear"></div>
+        </aside>
+        <aside id="random_post-7" class="widget random_post wow fadeInUp" data-wow-delay="0.3s">
+            <h3 class="widget-title">
+                <i class="fa fa-bars"></i>随机文章
+            </h3>
+            <div id="random_post_widget">
+                <ul>
+                    <li>
+                            <a href="12.htm" rel="bookmark">
+                                    Java中静态代码块、构造代码块的区别</a>
+                        </li>
+                    <li>
+                            <a href="30.htm" rel="bookmark">
+                                    SpringBoot + mongodb 整合, 记录网站操作日志，常用查询操作</a>
+                        </li>
+                    <li>
+                            <a href="1.htm" rel="bookmark">
+                                    [转载]SpringMVC中使用Interceptor拦截器</a>
+                        </li>
+                    <li>
+                            <a href="3.htm" rel="bookmark">
+                                    使用rapid-framework继承jsp页面</a>
+                        </li>
+                    <li>
+                            <a href="8.htm" rel="bookmark">
+                                    Mybatis高级映射多对多查询</a>
+                        </li>
+                    <li>
+                            <a href="4.htm" rel="bookmark">
+                                    [转载]HTTP的幂等性</a>
+                        </li>
+                    <li>
+                            <a href="33.htm" rel="bookmark">
+                                    MySQL常用命令语句</a>
+                        </li>
+                    <li>
+                            <a href="2.htm" rel="bookmark">
+                                    springmvc 表单中文乱码解决方案</a>
+                        </li>
+                    </ul>
+            </div>
+            <div class="clear"></div>
+        </aside>
+        </div>
+</div>
+    <div class="clear"></div>
+    <footer id="colophon" class="site-footer" role="contentinfo">
+    <div class="site-info">
+        <p style="text-align: center;">Copyright © 2017
+            <a href="../default.html" target="_blank" rel="noopener noreferrer">风吟博客</a>
+            All rights reserved.
+            <a target="_blank" href="../map.htm" >
+                <span class="font-text">站点地图</span>
+            </a>
+        </p>
+    </div>
+    <!-- .site-info -->
+</footer><!-- .site-footer -->
+</div>
+
+<script src="../js/jquery.min.js"></script>
+<script src="../js/superfish.js"></script>
+<script src='../js/sticky.js'></script>
+<script src="../js/script.js"></script>
+<script src="../plugin/layui/layui.all.js"></script>
+
+
+<script src="../js/jquery.cookie.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            if ($('#author_name').val() == '') {
+                var author = localStorage.getItem("author");
+                $("#author_name").val(author == 'undefined' ? '' : author);
+            }
+            if ($('#author_email').val() == '') {
+                var email = localStorage.getItem("email");
+                $("#author_email").val(email == 'undefined' ? '' : email);
+            }
+            if ($('#author_url').val() == '') {
+                var url = localStorage.getItem("url");
+                $("#author_url").val(url == 'undefined' ? '' : url);
+            }
+        });
+
+        var articleId = $("#articleDetail").attr("data-id");
+        increaseViewCount(articleId);
+        layui.code({
+            elem: 'pre',//默认值为.layui-code
+            // skin: 'notepad', //如果要默认风格，不用设定该key。
+            about: false
+        });
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Cache-Control" content="max-age=72000"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="applicable-device" content="pc,mobile">
+    <meta name="MobileOptimized" content="width"/>
+    <meta name="HandheldFriendly" content="true"/>
+    <link rel="shortcut icon" href="../../img/logo.png">
+    <meta name="description" content="风吟博客,一个简洁的Java博客,言曌程序学习的一个新起点。"/>
+    <meta name="keywords" content="风吟,风吟博客,Java博客,SSM博客,言曌,言曌博客"/>
+    <title>sql语句分为三类(DML,DDL,DCL)-介绍</title>
+<link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../plugin/font-awesome/font-awesome/css/font-awesome.css">
+
+    <link rel="stylesheet" href="../../css/highlight.css">
+        <style>
+            .entry-title {
+                background: #f8f8f8;
+            }
+        </style>
+    </head>
+<body>
+<div id="page" class="site" style="transform: none;">
+
+    <header id="masthead" class="site-header">
+    <nav id="top-header">
+        <div class="top-nav">
+            <div class="user-login">
+                <a href="http://localhost:8081/admin">登录</a>
+                    <a href="https://liuyanzhao.com/bulletin/my-service" target="_blank" style="color:red;">毕设代做/有偿服务</a>
+            </div>
+            <div class="menu-topmenu-container">
+                <ul id="menu-topmenu" class="top-menu">
+                    <li class="menu-item">
+                        </li>
+                    <li class="menu-item">
+                        <a href="../../applyLink.htm" >
+                                    <i class="fa fa-link"></i>
+                                    <span class="font-text">申请友链&nbsp;</span>&nbsp;
+                                </a>
+                            </li>
+                    <li class="menu-item">
+                        <a href="../../articleFile.htm" >
+                                    <i class="fa-list-alt fa"></i>
+                                    <span class="font-text">文章归档&nbsp;</span>&nbsp;
+                                </a>
+                            </li>
+                    <li class="menu-item">
+                        </li>
+                    <li class="menu-item">
+                        <a href="../../aboutSite.htm" >
+                                    <i class="fa fa-info"></i>
+                                    <span class="font-text">关于本站&nbsp;</span>&nbsp;
+                                </a>
+                            </li>
+                    </ul>
+            </div>
+        </div>
+    </nav><!-- #top-header -->
+    <div id="menu-box">
+        <div id="top-menu">
+                <span class="nav-search">
+                    <i class="fa fa-search"></i>
+                </span>
+            <div class="logo-site"><h1 class="site-title">
+                <a href="../../default.html" title="风吟博客">风吟博客</a>
+            </h1>
+                <p class="site-description">莫问收获，但问耕耘。</p>
+            </div><!-- .logo-site -->
+            <div id="site-nav-wrap">
+                <div id="sidr-close">
+                    <a href="13.html#sidr-close" class="toggle-sidr-close">×</a>
+                </div>
+                <nav id="site-nav" class="main-nav">
+                    <a href="13.html#sidr-main" id="navigation-toggle" class="bars">
+                        <i class="fa fa-bars"></i>
+                    </a>
+                    <div class="menu-pcmenu-container">
+                        <ul id="menu-pcmenu" class="down-menu nav-menu sf-js-enabled sf-arrows">
+
+                            <li>
+                                <a href="../../default.html">
+                                    <i class="fa-home fa"></i>
+                                    <span class="font-text">首页</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                        <a href="../../category/1.htm">
+                                            <i class="fa fa-coffee"></i>
+                                            <span class="font-text">Java&nbsp;</span>
+                                        </a>
+                                        <ul class="sub-menu">
+                                            <li>
+                                                        <a href="../../category/2.htm" target="_blank">Java基础</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../../category/3.htm" target="_blank">Core Java</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../../category/4.htm" target="_blank">多线程并发编程</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../../category/5.htm" target="_blank">Sockets和IO</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../../category/6.htm" target="_blank">设计模式和反射</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../../category/7.htm" target="_blank">JVM</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../../category/8.htm" target="_blank">JavaWeb</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../../category/9.htm" target="_blank">Java框架</a>
+                                                    </li>
+                                                </ul>
+                                    </li>
+                                <li>
+                                        <a href="../../category/10.htm">
+                                            <i class="fa fa-cubes"></i>
+                                            <span class="font-text">计算机科学&nbsp;</span>
+                                        </a>
+                                        <ul class="sub-menu">
+                                            <li>
+                                                        <a href="../../category/11.htm" target="_blank">数据结构和算法</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../../category/12.htm" target="_blank">操作系统</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../../category/13.htm" target="_blank">数据库</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../../category/14.htm" target="_blank">计算机网络</a>
+                                                    </li>
+                                                </ul>
+                                    </li>
+                                <li>
+                                        <a href="../../category/15.htm">
+                                            <i class="fa-snowflake-o fa"></i>
+                                            <span class="font-text">其他技术&nbsp;</span>
+                                        </a>
+                                        <ul class="sub-menu">
+                                            <li>
+                                                        <a href="../../category/16.htm" target="_blank">消息服务</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../../category/17.htm" target="_blank">缓存服务</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../../category/100000003.htm" target="_blank">微服务</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../../category/100000004.htm" target="_blank">搜索引擎</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../../category/100000005.htm" target="_blank">权限框架</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../../category/100000006.htm" target="_blank">开发利器</a>
+                                                    </li>
+                                                </ul>
+                                    </li>
+                                <li>
+                                        <a href="https://leetcode.com/problemset/all">
+                                            <i class="ssss"></i>
+                                            <span class="font-text">LeetCode&nbsp;</span>
+                                        </a>
+                                    </li>
+                                <li>
+                                        <a href="../../message.htm">
+                                            <i class="fa fa-comment"></i>
+                                            <span class="font-text">留言板&nbsp;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                    </div>
+                </nav>
+            </div>
+            <div class="clear"></div>
+        </div><!-- #top-menu -->
+    </div><!-- #menu-box -->
+    </header><!-- #masthead -->
+<div id="search-main">
+    <div class="searchbar">
+        <form method="get" id="searchform" action="http://localhost:8081/search" accept-charset="UTF-8">
+            <span>
+                <input type="text" value="" name="keywords" id="s" placeholder="输入搜索内容"required="">
+                <button type="submit" id="searchsubmit">搜索</button>
+            </span>
+        </form>
+    </div>
+    <div class="clear"></div>
+</div>
+<nav class="breadcrumb">
+        <a class="crumbs" href="../../default.html">
+            <i class="fa fa-home"></i>首页
+        </a>
+        <i class="fa fa-angle-right"></i>
+                    <a href="../../category/10.htm">
+                            计算机科学</a>
+                <i class="fa fa-angle-right"></i>
+                    <a href="../../category/13.htm">
+                            数据库</a>
+                <i class="fa fa-angle-right"></i>
+        正文
+    </nav>
+    <div id="content" class="site-content" style="transform: none;">
+        <div id="primary" class="content-area">
+        <main id="main" class="site-main" role="main">
+            <article class="post" id="articleDetail" data-id="13">
+                <header class="entry-header">
+                    <h1 class="entry-title">
+                            sql语句分为三类(DML,DDL,DCL)-介绍</h1>
+                </header><!-- .entry-header -->
+                <div class="entry-content">
+                    <div class="single-content">
+                            <p><span>DML（data manipulation language）：数据库操作语言</span><br><span>它们是SELECT、UPDATE、INSERT、DELETE，就象它的名字一样</span></p><p>&nbsp;</p><p><span>DDL（data definition language）：的数据库定义语言</span><br><span>主要的命令有CREATE、ALTER、DROP等，DDL主要是用在定义或改变表（TABLE）的结构，数据类型，表之间的链接和约束等初始化工作上，他们大多在建立表时使用</span></p><p>&nbsp;</p><p><span>DCL（Data Control Language）：&nbsp;数据库控制语言</span><br><span>是用来设置或更改数据库用户或角色权限的语句，包括（grant,deny,revoke等）语句。在默认状态下，只有sysadmin,dbcreator,db_owner或db_securityadmin等人员才有权力执行DCL</span></p><p>&nbsp;</p><p><strong>详细解释：</strong></p><h2>一、DDL is Data Definition Language statements</h2><p>数据定义语言，用于定义和管理&nbsp;<a href="https://liuyanzhao.com/tag/sql/" title="查看与 SQL 相关的文章" target="_blank">SQL</a>&nbsp;数据库中的所有对象的语言</p><p>1.CREATE - to create objects in the database&nbsp;&nbsp; 创建</p><p>2.ALTER - alters the structure of the database&nbsp;&nbsp; 修改</p><p>3.DROP - delete objects from the database&nbsp;&nbsp; 删除</p><p>4.TRUNCATE - remove all records from a table, including all spaces allocated for the records are removed</p><p>TRUNCATE TABLE [Table Name]。</p><p>下面是对Truncate语句在MS<a href="https://liuyanzhao.com/tag/sql/" title="查看与 SQL 相关的文章" target="_blank">SQL</a>Server2000中用法和原理的说明：</p><p>Truncate table 表名 速度快,而且效率高,因为:</p><p>TRUNCATE TABLE 在功能上与不带 WHERE 子句的 DELETE 语句相同：二者均删除表中的全部行。但</p><p>TRUNCATE TABLE 比 DELETE 速度快，且使用的系统和事务日志资源少。</p><p>DELETE 语句每次删除一行，并在事务日志中为所删除的每行记录一项。TRUNCATE TABLE 通过释放存</p><p>储表数据所用的数据页来删除数据，并且只在事务日志中记录页的释放。</p><p>TRUNCATE TABLE 删除表中的所有行，但表结构及其列、约束、索引等保持不变。新行标识所用的计数值重置为该列的种子。如果想保留标识计数值，请改用 DELETE。如果要删除表定义及其数据，请使用 DROP TABLE 语句。</p><p>对于由 FOREIGN KEY 约束引用的表，不能使用 TRUNCATE TABLE，而应使用不带 WHERE 子句的 DELETE 语句。由于 TRUNCATE TABLE 不记录在日志中，所以它不能激活触发器。</p><p>TRUNCATE TABLE 不能用于参与了索引视图的表。</p><p>5.COMMENT - add comments to the data dictionary 注释</p><p>6.GRANT - gives user's access privileges to database 授权</p><p>7.REVOKE - withdraw access privileges given with the GRANT command&nbsp;&nbsp; 收回已经授予的权限</p><p>&nbsp;</p><h2>二、DML is Data Manipulation Language statements</h2><p>数据操作语言，SQL中处理数据等操作统称为数据操纵语言</p><p>1.SELECT - retrieve data from the a database&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 查询</p><p>2.INSERT - insert data into a table&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 添加</p><p>3.UPDATE - updates existing data within a table&nbsp;&nbsp;&nbsp; 更新</p><p>4.DELETE - deletes all records from a table, the space for the records remain&nbsp;&nbsp; 删除</p><p>5.CALL - call a PL/SQL or Java subprogram</p><p>6.EXPLAIN PLAN - explain access path to data</p><p>Oracle RDBMS执行每一条SQL语句，都必须经过Oracle优化器的评估。所以，了解优化器是如何选择(搜索)路径以及索引是如何被使用的，对优化SQL语句有很大的帮助。Explain可以用来迅速方便地查出对于给定SQL语句中的查询数据是如何得到的即搜索路径(我们通常称为Access Path)。从而使我们选择最优的查询方式达到最大的优化效果。</p><p>7.LOCK TABLE - control concurrency 锁，用于控制并发</p><p>&nbsp;</p><h2>三、DCL is Data Control Language statements</h2><p>数据控制语言，用来授予或回收访问数据库的某种特权，并控制数据库操纵事务发生的时间及效果，对数据库实行监视等</p><p>1.COMMIT - save work done 提交</p><p>2.SAVEPOINT - identify a point in a transaction to which you can later roll back 保存点</p><p>3.ROLLBACK - restore database to original since the last COMMIT&nbsp;&nbsp; 回滚</p><p>4.SET TRANSACTION - Change transaction options like what rollback segment to use&nbsp;&nbsp; 设置当前事务的特性，它对后面的事务没有影响</p><div><br></div></div>
+                    <div class="s-weixin">
+                        <ul class="weimg1">
+                            <li><strong>微信</strong></li>
+                            <li>赶快加我聊天吧</li>
+                            <li><img src="../../img/weixin.jpg"></li>
+                        </ul>
+                        <ul class="weimg2">
+                            <li><strong>博客交流群</strong></li>
+                            <li>海纳百川，大家来水</li>
+                            <li><img src="../../img/qqGroup.jpg" alt="weinxin"></li>
+                        </ul>
+                        <div class="clear"></div>
+                    </div>
+                    <div class="clear"></div>
+                    <div id="social">
+                        <div class="social-main">
+                            <span class="like">
+                                <a href="javascript:;" data-action="ding" data-id="1" title="点赞"
+                                   class="favorite" onclick="increaseLikeCount()">
+                                    <i class="fa fa-thumbs-up"></i>赞
+                                    <i class="count"
+                                       id="count-13">1</i>
+                                </a>
+                            </span>
+                            <div class="shang-p">
+                                <div class="shang-empty"><span></span></div>
+                                <span class="shang-s">
+                                    <a onclick="PaymentUtils.show();" style="cursor:pointer">赏</a>
+                                </span>
+                            </div>
+                            <div class="share-sd">
+                                        <span class="share-s" style="margin-top: 25px!important;">
+                                            <a href="javascript:void(0)" id="share-s" title="分享">
+                                                <i class="fa fa-share-alt"></i>分享
+                                            </a>
+                                        </span>
+                                <div id="share">
+                                    <ul class="bdsharebuttonbox bdshare-button-style1-16" data-bd-bind="1503997585792">
+                                        <li><a title="更多" class="bds_more fa fa-plus-square" data-cmd="more"
+                                               onclick="return false;" href="13.html#"></a></li>
+                                        <li><a title="分享到QQ空间" class="fa fa-qq" data-cmd="qzone" onclick="return false;"
+                                               href="13.html#"></a></li>
+                                        <li><a title="分享到新浪微博" class="fa fa-weibo" data-cmd="tsina"
+                                               onclick="return false;" href="13.html#"></a></li>
+                                        <li><a title="分享到腾讯微博" class="fa fa-pinterest-square" data-cmd="tqq"
+                                               onclick="return false;" href="13.html#"></a></li>
+                                        <li><a title="分享到人人网" class="fa fa-renren" data-cmd="renren"
+                                               onclick="return false;" href="13.html#"></a></li>
+                                        <li><a title="分享到微信" class="fa fa-weixin" data-cmd="weixin"
+                                               onclick="return false;" href="13.html#"></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+
+                    <footer class="single-footer">
+                        <ul class="single-meta">
+                            <li class="comment">
+                                <a href="../13.htm#comments"
+                                   rel="external nofollow">
+                                    <i class="fa fa-comment-o"></i>
+                                    <i class="comment-count">3</i>
+                                </a>
+                            </li>
+                            <li class="views">
+                                <i class="fa fa-eye"></i> <span
+                                    class="articleViewCount">1</span>
+                                views
+                            </li>
+                            <li class="r-hide">
+                                <a href="javascript:pr()" title="侧边栏">
+                                    <i class="fa fa-caret-left"></i>
+                                    <i class="fa fa-caret-right"></i>
+                                </a>
+                            </li>
+                        </ul>
+                        <ul id="fontsize">
+                            <li>A+</li>
+                        </ul>
+                        <div class="single-cat-tag">
+                            <div class="single-cat">所属分类：
+                                <a href="../../category/10.htm">
+                                            计算机科学</a>
+                                <a href="../../category/13.htm">
+                                            数据库</a>
+                                </div>
+                        </div>
+                    </footer><!-- .entry-footer -->
+
+
+                    <div class="clear"></div>
+                </div><!-- .entry-content -->
+            </article><!-- #post -->
+
+                <div class="single-tag">
+                <ul class="" data-wow-delay="0.3s">
+                    </ul>
+            </div>
+                <div class="authorbio wow fadeInUp">
+                <img alt="言曌" src="http://localhost:8081/uploads/2017/10/20171006225356181.jpg"
+                     class="avatar avatar-64 photo" height="64" width="64">
+                <ul class="postinfo">
+                    <li></li>
+                    <li><strong>版权声明：</strong>本站原创文章，于2017-10-07，由
+                        <strong>
+                                言曌</strong>
+                        发表。
+                    </li>
+                    <li class="reprinted"><strong>转载请注明：</strong>
+                        <a href="../13.htm"
+                           rel="bookmark"
+                           title="本文固定链接 /article/13">
+                                sql语句分为三类(DML,DDL,DCL)-介绍 | 风吟博客</a>
+                    </li>
+                </ul>
+                <div class="clear"></div>
+            </div>
+                <div id="single-widget">
+                <div class="wow fadeInUp" data-wow-delay="0.3s">
+                    <aside id="related_post-2" class="widget">
+                        <h3 class="widget-title">
+                            <span class="s-icon"></span>相关文章
+                        </h3>
+                        <div id="related_post_widget">
+                            <ul>
+                                <li>
+                                        <a href="../13.htm">sql语句分为三类(DML,DDL,DCL)-介绍</a>
+                                    </li>
+                                <li>
+                                        <a href="../13.htm">sql语句分为三类(DML,DDL,DCL)-介绍</a>
+                                    </li>
+                                <li>
+                                        <a href="../4.htm">[转载]HTTP的幂等性</a>
+                                    </li>
+                                <li>
+                                        <a href="../33.htm">MySQL常用命令语句</a>
+                                    </li>
+                                <li>
+                                        <a href="../33.htm">MySQL常用命令语句</a>
+                                    </li>
+                                </ul>
+                        </div>
+                        <div class="clear"></div>
+                    </aside>
+                        <aside id="hot_post-8" class="widget hot_post">
+                        <h3 class="widget-title"><span class="s-icon"></span>猜你喜欢</h3>
+                        <div id="hot_post_widget">
+                            <ul>
+                                <li>
+                                        <a href="../1.htm">
+                                                [转载]SpringMVC中使用Interceptor拦截器</a>
+                                    </li>
+                                <li>
+                                        <a href="../2.htm">
+                                                springmvc 表单中文乱码解决方案</a>
+                                    </li>
+                                <li>
+                                        <a href="../4.htm">
+                                                [转载]HTTP的幂等性</a>
+                                    </li>
+                                <li>
+                                        <a href="../33.htm">
+                                                MySQL常用命令语句</a>
+                                    </li>
+                                <li>
+                                        <a href="../11.htm">
+                                                Java如何让程序一直运行，不停止</a>
+                                    </li>
+                                </ul>
+                        </div>
+                        <div class="clear"></div>
+                    </aside>
+                        </div>
+                <div class="clear"></div>
+            </div>
+                <nav class="nav-single">
+                <a href="../1.htm" rel="next">
+                            <span class="meta-nav">
+                                <span class="post-nav">上一篇
+                                 <i class="fa fa-angle-left"></i>
+                                </span>
+                                <br>[转载]SpringMVC中使用Interceptor拦截器</span>
+                        </a>
+                    <a href="../14.htm" rel="next">
+                            <span class="meta-nav">
+                                <span class="post-nav">下一篇
+                                 <i class="fa fa-angle-right"></i>
+                                </span>
+                                <br>execute、executeUpdate、executeQuery三者的区别</span>
+                        </a>
+                    <div class="clear"></div>
+            </nav>
+                <div class="scroll-comments"></div>
+            <div id="comments" class="comments-area">
+                <div id="respond" class="comment-respond">
+                    <h3 id="reply-title" class="comment-reply-title"><span id="reply-title-word">发表评论</span>
+                        <a rel="nofollow" id="cancel-comment-reply-link"
+                           href="../13.htm#respond"
+                           style="">取消回复</a>
+                    </h3>
+                    <form id="comment_form" method="post">
+                        <p class="comment-form-comment">
+                            <textarea id="comment" name="commentContent" rows="4" tabindex="1" required></textarea>
+                        </p>
+                        <div id="comment-author-info">
+                            <input type="hidden" name="commentPid" value="0">
+                            <input type="hidden" name="commentPname" value="">
+                            <input type="hidden" name="commentRole" value="0">
+                                <p class="comment-form-author">
+                                    <label for="author_name">
+                                        昵称<span class="required">*</span>
+                                    </label>
+                                    <input type="text" name="commentAuthorName" id="author_name" class="" value=""
+                                           tabindex="2" required>
+                                </p>
+                                <p class="comment-form-email">
+                                    <label for="author_email">
+                                        邮箱<span class="required">*</span>
+                                    </label>
+                                    <input type="email" name="commentAuthorEmail" id="author_email" class="" value=""
+                                           tabindex="3" required>
+                                </p>
+                                <p class="comment-form-url">
+                                    <label for="author_url">网址</label>
+                                    <input type="url" name="commentAuthorUrl" id="author_url" class="" value=""
+                                           tabindex="4">
+                                </p>
+                            </div>
+                        <div class="clear"></div>
+                        <p class="form-submit">
+                            <input id="submit" name="submit" type="submit" tabindex="5" value="提交评论">
+                            <input type="hidden" name="commentArticleId"
+                                   value="13" id="article_id">
+                            <input type="hidden" name="commentPid" id="comment_pid" value="0">
+                        </p>
+                    </form>
+                </div>
+
+                <ol class="comment-list">
+                    <li class="comments-anchor">
+                                <ul id="anchor-comment-11"></ul>
+                            </li>
+                            <li class="comment">
+                                <div id="div-comment-11" class="comment-body">
+                                    <div class="comment-author vcard">
+                                        <img class="avatar" src="13.html" alt="avatar"
+                                             style="display: block;">
+                                        <strong>多伦</strong>
+                                        <span class="comment-meta commentmetadata">
+                                            <span class="ua-info" style="display: inline;">
+                                                <br>
+                                                <span class="comment-aux">
+                                                    <span class="reply">
+                                                        <a rel="nofollow" class="comment-reply-link" href="13.html#respond"
+                                                           onclick="replyComment()">回复
+                                                        </a>
+                                                    </span>
+                                                    2017年10月07日 16:13:09&nbsp;
+                                                    <span class="floor"> &nbsp;1楼 </span>
+                                                </span>
+                                            </span>
+                                        </span>
+                                        <p>
+                                            多伦路过</p>
+                                    </div>
+                                </div>
+                                <ul class="children">
+                                    </ul>
+                            </li>
+                        <li class="comments-anchor">
+                                <ul id="anchor-comment-12"></ul>
+                            </li>
+                            <li class="comment">
+                                <div id="div-comment-12" class="comment-body">
+                                    <div class="comment-author vcard">
+                                        <img class="avatar" src="13.html" alt="avatar"
+                                             style="display: block;">
+                                        <strong>贾克斯</strong>
+                                        <span class="comment-meta commentmetadata">
+                                            <span class="ua-info" style="display: inline;">
+                                                <br>
+                                                <span class="comment-aux">
+                                                    <span class="reply">
+                                                        <a rel="nofollow" class="comment-reply-link" href="13.html#respond"
+                                                           onclick="replyComment()">回复
+                                                        </a>
+                                                    </span>
+                                                    2017年10月07日 16:13:44&nbsp;
+                                                    <span class="floor"> &nbsp;2楼 </span>
+                                                </span>
+                                            </span>
+                                        </span>
+                                        <p>
+                                            我是贾克斯</p>
+                                    </div>
+                                </div>
+                                <ul class="children">
+                                    <li class="comments-anchor">
+                                                <ul id="anchor-comment-13"></ul>
+                                            </li>
+                                            <li class="comment">
+                                                <div id="div-comment-12" class="comment-body">
+                                                    <div class="comment-author vcard">
+                                                        <img class="avatar" src="13.html" alt="avatar"
+                                                             style="display: block;">
+                                                        <strong>瑞克斯</strong>
+                                                        <span class="comment-meta">
+                                                    <span class="ua-info" style="display: inline;">
+                                                    <br>
+                                                    <span class="comment-aux">
+                                                        <span class="reply">
+                                                            <a rel="nofollow" class="comment-reply-link" href="13.html#respond"
+                                                               onclick="replyComment()">回复
+                                                            </a>
+                                                        </span>
+                                                        2017年10月07日 16:14:32&nbsp;
+                                                        <span class="floor"> &nbsp;1层 </span>
+                                                    </span>
+                                                </span>
+                                                    </span>
+                                                        <p>
+                                                            <span class="at">@ 贾克斯</span>
+                                                                贾克斯你好，我是瑞克斯</p>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                            </li>
+                        </ol>
+            </div>
+                </main>
+        <!-- .site-main -->
+    </div>
+    <div id="sidebar" class="widget-area all-sidebar"
+     style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
+
+        <aside class="widget widget_search">
+            <div class="searchbar">
+                <form method="get" id="searchform1" action="http://localhost:8081/search">
+                    <span> <input type="text" value="" name="keywords" id="s1" placeholder="输入搜索内容" required="">
+                        <button type="submit" id="searchsubmit1">搜索</button>
+                    </span>
+                </form>
+            </div>
+            <div class="clear"></div>
+        </aside>
+        <aside class="widget hot_comment" >
+            <h3 class="widget-title">
+                <i class="fa fa-bars"></i>热评文章
+            </h3>
+            <div id="hot_comment_widget">
+                <ul>
+                    <li>
+                            <a href="../17.htm" rel="bookmark" title=" (5条评论)">
+                                    java中ImageIcon路径问题</a>
+                        </li>
+                    <li>
+                            <a href="../14.htm" rel="bookmark" title=" (3条评论)">
+                                    execute、executeUpdate、executeQuery三者的区别</a>
+                        </li>
+                    <li>
+                            <a href="../13.htm" rel="bookmark" title=" (3条评论)">
+                                    sql语句分为三类(DML,DDL,DCL)-介绍</a>
+                        </li>
+                    <li>
+                            <a href="../8.htm" rel="bookmark" title=" (3条评论)">
+                                    Mybatis高级映射多对多查询</a>
+                        </li>
+                    <li>
+                            <a href="../11.htm" rel="bookmark" title=" (2条评论)">
+                                    Java如何让程序一直运行，不停止</a>
+                        </li>
+                    <li>
+                            <a href="../9.htm" rel="bookmark" title=" (2条评论)">
+                                    Servlet 实现验证码</a>
+                        </li>
+                    <li>
+                            <a href="../6.htm" rel="bookmark" title=" (2条评论)">
+                                    Hibernate 简单的CURD操作</a>
+                        </li>
+                    <li>
+                            <a href="../2.htm" rel="bookmark" title=" (2条评论)">
+                                    springmvc 表单中文乱码解决方案</a>
+                        </li>
+                    </ul>
+            </div>
+            <div class="clear"></div>
+        </aside>
+        <aside class="widget">
+            <h3 class="widget-title">
+                <i class="fa fa-bars"></i>所有标签
+            </h3>
+            <div class="tagcloud">
+                <a href="../../index.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Java</a>
+                <a href="../../tag/2.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            算法</a>
+                <a href="../../tag/3.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            数据结构</a>
+                <a href="../../tag/4.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            C</a>
+                <a href="../../tag/5.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            操作系统</a>
+                <a href="../../tag/6.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            计算机网络</a>
+                <a href="../../tag/8.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            面试题</a>
+                <a href="../../tag/9.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            数据库</a>
+                <a href="../../tag/10.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            MySQL</a>
+                <a href="../../tag/11.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Spring</a>
+                <a href="../../tag/12.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            SpringMVC</a>
+                <a href="../../tag/13.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            MyBatis</a>
+                <a href="../../tag/14.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            JVM</a>
+                <a href="../../tag/15.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            设计模式</a>
+                <a href="../../tag/16.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            网络编程</a>
+                <a href="../../tag/17.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            IO</a>
+                <a href="../../tag/18.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            JSP</a>
+                <a href="../../tag/19.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Servlet</a>
+                <a href="../../tag/20.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            JavaWeb</a>
+                <a href="../../tag/21.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Hibernate</a>
+                <a href="../../tag/22.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            SQL</a>
+                <a href="../../tag/24.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Redis</a>
+                <a href="../../tag/25.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            SPA</a>
+                <a href="../../tag/26.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            SpringCloud</a>
+                <a href="../../tag/27.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Dubbo</a>
+                <a href="../../tag/28.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            EDAS</a>
+                <a href="../../tag/29.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            MongoDB</a>
+                <a href="../../tag/31.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            SpringBoot</a>
+                <a href="../../tag/32.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            ElasticSearch</a>
+                <a href="../../tag/33.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Docker</a>
+                <a href="../../tag/34.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Jenkins</a>
+                <a href="../../tag/35.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Vue</a>
+                <a href="../../tag/36.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            IDEA</a>
+                <a href="../../tag/37.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Shiro</a>
+                <a href="../../tag/38.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            RocketMQ</a>
+                <div class="clear"></div>
+            </div>
+            <div class="clear"></div>
+        </aside>
+        <aside id="random_post-7" class="widget random_post wow fadeInUp" data-wow-delay="0.3s">
+            <h3 class="widget-title">
+                <i class="fa fa-bars"></i>随机文章
+            </h3>
+            <div id="random_post_widget">
+                <ul>
+                    <li>
+                            <a href="../16.htm" rel="bookmark">
+                                    Java中File类的使用</a>
+                        </li>
+                    <li>
+                            <a href="../8.htm" rel="bookmark">
+                                    Mybatis高级映射多对多查询</a>
+                        </li>
+                    <li>
+                            <a href="../5.htm" rel="bookmark">
+                                    JDBC常用API和使用</a>
+                        </li>
+                    <li>
+                            <a href="../6.htm" rel="bookmark">
+                                    Hibernate 简单的CURD操作</a>
+                        </li>
+                    <li>
+                            <a href="../32.htm" rel="bookmark">
+                                    Docker_入门？只要这篇就够了！（纯干货适合0基础小白）</a>
+                        </li>
+                    <li>
+                            <a href="../14.htm" rel="bookmark">
+                                    execute、executeUpdate、executeQuery三者的区别</a>
+                        </li>
+                    <li>
+                            <a href="../7.htm" rel="bookmark">
+                                    Hibernate 基本类型</a>
+                        </li>
+                    <li>
+                            <a href="../27.htm" rel="bookmark">
+                                    SpringCloud 中使用 Eureka 和 Feign 实现增删改查</a>
+                        </li>
+                    </ul>
+            </div>
+            <div class="clear"></div>
+        </aside>
+        </div>
+</div>
+    <div class="clear"></div>
+    <footer id="colophon" class="site-footer" role="contentinfo">
+    <div class="site-info">
+        <p style="text-align: center;">Copyright © 2017
+            <a href="../../default.html" target="_blank" rel="noopener noreferrer">风吟博客</a>
+            All rights reserved.
+            <a target="_blank" href="../../map.htm" >
+                <span class="font-text">站点地图</span>
+            </a>
+        </p>
+    </div>
+    <!-- .site-info -->
+</footer><!-- .site-footer -->
+</div>
+
+<script src="../../js/jquery.min.js"></script>
+<script src="../../js/superfish.js"></script>
+<script src='../../js/sticky.js'></script>
+<script src="../../js/script.js"></script>
+<script src="../../plugin/layui/layui.all.js"></script>
+
+
+<script src="../../js/jquery.cookie.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            if ($('#author_name').val() == '') {
+                var author = localStorage.getItem("author");
+                $("#author_name").val(author == 'undefined' ? '' : author);
+            }
+            if ($('#author_email').val() == '') {
+                var email = localStorage.getItem("email");
+                $("#author_email").val(email == 'undefined' ? '' : email);
+            }
+            if ($('#author_url').val() == '') {
+                var url = localStorage.getItem("url");
+                $("#author_url").val(url == 'undefined' ? '' : url);
+            }
+        });
+
+        var articleId = $("#articleDetail").attr("data-id");
+        increaseViewCount(articleId);
+        layui.code({
+            elem: 'pre',//默认值为.layui-code
+            // skin: 'notepad', //如果要默认风格，不用设定该key。
+            about: false
+        });
+
+    </script>
+
+</body>
+</html>

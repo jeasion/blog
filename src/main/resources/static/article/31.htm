@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Cache-Control" content="max-age=72000"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="applicable-device" content="pc,mobile">
+    <meta name="MobileOptimized" content="width"/>
+    <meta name="HandheldFriendly" content="true"/>
+    <link rel="shortcut icon" href="../img/logo.png">
+    <meta name="description" content="风吟博客,一个简洁的Java博客,言曌程序学习的一个新起点。"/>
+    <meta name="keywords" content="风吟,风吟博客,Java博客,SSM博客,言曌,言曌博客"/>
+    <title>RocketMQ 实战之快速入门</title>
+<link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../plugin/font-awesome/font-awesome/css/font-awesome.css">
+
+    <link rel="stylesheet" href="../css/highlight.css">
+        <style>
+            .entry-title {
+                background: #f8f8f8;
+            }
+        </style>
+    </head>
+<body>
+<div id="page" class="site" style="transform: none;">
+
+    <header id="masthead" class="site-header">
+    <nav id="top-header">
+        <div class="top-nav">
+            <div class="user-login">
+                <a href="http://localhost:8081/admin">登录</a>
+                    <a href="https://liuyanzhao.com/bulletin/my-service" target="_blank" style="color:red;">毕设代做/有偿服务</a>
+            </div>
+            <div class="menu-topmenu-container">
+                <ul id="menu-topmenu" class="top-menu">
+                    <li class="menu-item">
+                        </li>
+                    <li class="menu-item">
+                        <a href="../applyLink.htm" >
+                                    <i class="fa fa-link"></i>
+                                    <span class="font-text">申请友链&nbsp;</span>&nbsp;
+                                </a>
+                            </li>
+                    <li class="menu-item">
+                        <a href="../articleFile.htm" >
+                                    <i class="fa-list-alt fa"></i>
+                                    <span class="font-text">文章归档&nbsp;</span>&nbsp;
+                                </a>
+                            </li>
+                    <li class="menu-item">
+                        </li>
+                    <li class="menu-item">
+                        <a href="../aboutSite.htm" >
+                                    <i class="fa fa-info"></i>
+                                    <span class="font-text">关于本站&nbsp;</span>&nbsp;
+                                </a>
+                            </li>
+                    </ul>
+            </div>
+        </div>
+    </nav><!-- #top-header -->
+    <div id="menu-box">
+        <div id="top-menu">
+                <span class="nav-search">
+                    <i class="fa fa-search"></i>
+                </span>
+            <div class="logo-site"><h1 class="site-title">
+                <a href="../default.html" title="风吟博客">风吟博客</a>
+            </h1>
+                <p class="site-description">莫问收获，但问耕耘。</p>
+            </div><!-- .logo-site -->
+            <div id="site-nav-wrap">
+                <div id="sidr-close">
+                    <a href="31.htm#sidr-close" class="toggle-sidr-close">×</a>
+                </div>
+                <nav id="site-nav" class="main-nav">
+                    <a href="31.htm#sidr-main" id="navigation-toggle" class="bars">
+                        <i class="fa fa-bars"></i>
+                    </a>
+                    <div class="menu-pcmenu-container">
+                        <ul id="menu-pcmenu" class="down-menu nav-menu sf-js-enabled sf-arrows">
+
+                            <li>
+                                <a href="../default.html">
+                                    <i class="fa-home fa"></i>
+                                    <span class="font-text">首页</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                        <a href="../category/1.htm">
+                                            <i class="fa fa-coffee"></i>
+                                            <span class="font-text">Java&nbsp;</span>
+                                        </a>
+                                        <ul class="sub-menu">
+                                            <li>
+                                                        <a href="../category/2.htm" target="_blank">Java基础</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/3.htm" target="_blank">Core Java</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/4.htm" target="_blank">多线程并发编程</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/5.htm" target="_blank">Sockets和IO</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/6.htm" target="_blank">设计模式和反射</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/7.htm" target="_blank">JVM</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/8.htm" target="_blank">JavaWeb</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/9.htm" target="_blank">Java框架</a>
+                                                    </li>
+                                                </ul>
+                                    </li>
+                                <li>
+                                        <a href="../category/10.htm">
+                                            <i class="fa fa-cubes"></i>
+                                            <span class="font-text">计算机科学&nbsp;</span>
+                                        </a>
+                                        <ul class="sub-menu">
+                                            <li>
+                                                        <a href="../category/11.htm" target="_blank">数据结构和算法</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/12.htm" target="_blank">操作系统</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/13.htm" target="_blank">数据库</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/14.htm" target="_blank">计算机网络</a>
+                                                    </li>
+                                                </ul>
+                                    </li>
+                                <li>
+                                        <a href="../category/15.htm">
+                                            <i class="fa-snowflake-o fa"></i>
+                                            <span class="font-text">其他技术&nbsp;</span>
+                                        </a>
+                                        <ul class="sub-menu">
+                                            <li>
+                                                        <a href="../category/16.htm" target="_blank">消息服务</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/17.htm" target="_blank">缓存服务</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/100000003.htm" target="_blank">微服务</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/100000004.htm" target="_blank">搜索引擎</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/100000005.htm" target="_blank">权限框架</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/100000006.htm" target="_blank">开发利器</a>
+                                                    </li>
+                                                </ul>
+                                    </li>
+                                <li>
+                                        <a href="https://leetcode.com/problemset/all">
+                                            <i class="ssss"></i>
+                                            <span class="font-text">LeetCode&nbsp;</span>
+                                        </a>
+                                    </li>
+                                <li>
+                                        <a href="../message.htm">
+                                            <i class="fa fa-comment"></i>
+                                            <span class="font-text">留言板&nbsp;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                    </div>
+                </nav>
+            </div>
+            <div class="clear"></div>
+        </div><!-- #top-menu -->
+    </div><!-- #menu-box -->
+    </header><!-- #masthead -->
+<div id="search-main">
+    <div class="searchbar">
+        <form method="get" id="searchform" action="http://localhost:8081/search" accept-charset="UTF-8">
+            <span>
+                <input type="text" value="" name="keywords" id="s" placeholder="输入搜索内容"required="">
+                <button type="submit" id="searchsubmit">搜索</button>
+            </span>
+        </form>
+    </div>
+    <div class="clear"></div>
+</div>
+<nav class="breadcrumb">
+        <a class="crumbs" href="../default.html">
+            <i class="fa fa-home"></i>首页
+        </a>
+        <i class="fa fa-angle-right"></i>
+                    <a href="../category/15.htm">
+                            其他技术</a>
+                <i class="fa fa-angle-right"></i>
+                    <a href="../category/16.htm">
+                            消息服务</a>
+                <i class="fa fa-angle-right"></i>
+        正文
+    </nav>
+    <div id="content" class="site-content" style="transform: none;">
+        <div id="primary" class="content-area">
+        <main id="main" class="site-main" role="main">
+            <article class="post" id="articleDetail" data-id="31">
+                <header class="entry-header">
+                    <h1 class="entry-title">
+                            RocketMQ 实战之快速入门</h1>
+                </header><!-- .entry-header -->
+                <div class="entry-content">
+                    <div class="single-content">
+                            <div><p>最近 RocketMQ 刚刚上生产环境，闲暇之时在这里做一些分享，主要目的是让初学者能快速上手RocketMQ。</p>
+<h2>RocketMQ 是什么</h2>
+<p>Github 上关于 RocketMQ 的介绍：<br>
+RcoketMQ 是一款低延迟、高可靠、可伸缩、易于使用的消息中间件。具有以下特性：</p>
+<ol>
+<li>支持发布/订阅（Pub/Sub）和点对点（P2P）消息模型</li>
+<li>在一个队列中可靠的先进先出（FIFO）和严格的顺序传递</li>
+<li>支持拉（pull）和推（push）两种消息模式</li>
+<li>单一队列百万消息的堆积能力</li>
+<li>支持多种消息协议，如 JMS、MQTT 等</li>
+<li>分布式高可用的部署架构,满足至少一次消息传递语义</li>
+<li>提供 docker 镜像用于隔离测试和云集群部署</li>
+<li>提供配置、指标和监控等功能丰富的 Dashboard</li>
+</ol>
+<p>对于这些特性描述，大家简单过一眼就即可，深入学习之后自然就明白了。</p>
+<h2>专业术语</h2>
+<h3>Producer</h3>
+<p>消息生产者，生产者的作用就是将消息发送到 MQ，生产者本身既可以产生消息，如读取文本信息等。也可以对外提供接口，由外部应用来调用接口，再由生产者将收到的消息发送到 MQ。</p>
+<h3>Producer Group</h3>
+<p>生产者组，简单来说就是多个发送同一类消息的生产者称之为一个生产者组。在这里可以不用关心，只要知道有这么一个概念即可。</p>
+<h3>Consumer</h3>
+<p>消息消费者，简单来说，消费 MQ 上的消息的应用程序就是消费者，至于消息是否进行逻辑处理，还是直接存储到数据库等取决于业务需要。</p>
+<h3>Consumer Group</h3>
+<p>消费者组，和生产者类似，消费同一类消息的多个 consumer 实例组成一个消费者组。</p>
+<h3>Topic</h3>
+<p>Topic 是一种消息的逻辑分类，比如说你有订单类的消息，也有库存类的消息，那么就需要进行分类，一个是订单 Topic 存放订单相关的消息，一个是库存 Topic 存储库存相关的消息。</p>
+<h3>Message</h3>
+<p>Message 是消息的载体。一个 Message 必须指定 topic，相当于寄信的地址。Message 还有一个可选的 tag 设置，以便消费端可以基于 tag 进行过滤消息。也可以添加额外的键值对，例如你需要一个业务 key 来查找 broker 上的消息，方便在开发过程中诊断问题。</p>
+<h3>Tag</h3>
+<p>标签可以被认为是对 Topic 进一步细化。一般在相同业务模块中通过引入标签来标记不同用途的消息。</p>
+<h3>Broker</h3>
+<p>Broker 是 RocketMQ 系统的主要角色，其实就是前面一直说的 MQ。Broker 接收来自生产者的消息，储存以及为消费者拉取消息的请求做好准备。</p>
+<h3>Name Server</h3>
+<p>Name Server 为 producer 和 consumer 提供路由信息。</p>
+<h2>RocketMQ 架构</h2>
+<div class="image-package">
+<div class="image-container">
+<div class="image-container-fill"></div>
+<div class="image-view" data-width="975" data-height="434"><img data-original-src="//upload-images.jianshu.io/upload_images/6332814-7885601f065a3556.png" data-original-width="975" data-original-height="434" data-original-format="image/png" data-original-filesize="69606" class="" src="http://upload-images.jianshu.io/upload_images/6332814-7885601f065a3556.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/975/format/webp"></div>
+</div>
+<div class="image-caption">RocketMQ 架构</div>
+</div>
+<p>由这张图可以看到有四个集群，分别是 NameServer 集群、Broker 集群、Producer 集群和 Consumer 集群：</p>
+<ol>
+<li>NameServer: 提供轻量级的服务发现和路由。 每个 NameServer 记录完整的路由信息，提供等效的读写服务，并支持快速存储扩展。</li>
+<li>Broker: 通过提供轻量级的 Topic 和 Queue 机制来处理消息存储,同时支持推（push）和拉（pull）模式以及主从结构的容错机制。</li>
+<li>Producer：生产者，产生消息的实例，拥有相同 Producer Group 的 Producer 组成一个集群。</li>
+<li>Consumer：消费者，接收消息进行消费的实例，拥有相同 Consumer Group 的<br>
+Consumer 组成一个集群。</li>
+</ol>
+<p>简单说明一下图中箭头含义，从 Broker 开始，Broker Master1 和 Broker Slave1 是主从结构，它们之间会进行数据同步，即 Date Sync。同时每个 Broker 与<br>
+NameServer 集群中的所有节<br>
+点建立长连接，定时注册 Topic 信息到所有 NameServer 中。</p>
+<p>Producer 与 NameServer 集群中的其中一个节点（随机选择）建立长连接，定期从 NameServer 获取 Topic 路由信息，并向提供 Topic 服务的 Broker Master 建立长连接，且定时向 Broker 发送心跳。Producer 只能将消息发送到 Broker master，但是 Consumer 则不一样，它同时和提供 Topic 服务的 Master 和 Slave<br>
+建立长连接，既可以从 Broker Master 订阅消息，也可以从 Broker Slave 订阅消息。</p>
+<h2>RocketMQ 集群部署模式</h2>
+<ol>
+<li>单 master 模式<br>
+也就是只有一个 master 节点，称不上是集群，一旦这个 master 节点宕机，那么整个服务就不可用，适合个人学习使用。</li>
+<li>多 master 模式<br>
+多个 master 节点组成集群，单个 master 节点宕机或者重启对应用没有影响。<br>
+优点：所有模式中性能最高<br>
+缺点：单个 master 节点宕机期间，未被消费的消息在节点恢复之前不可用，消息的实时性就受到影响。<br>
+<strong>注意</strong>：使用同步刷盘可以保证消息不丢失，同时 Topic 相对应的 queue 应该分布在集群中各个节点，而不是只在某各节点上，否则，该节点宕机会对订阅该 topic 的应用造成影响。</li>
+<li>多 master 多 slave 异步复制模式<br>
+在多 master 模式的基础上，每个 master 节点都有至少一个对应的 slave。master<br>
+节点可读可写，但是 slave 只能读不能写，类似于 mysql 的主备模式。<br>
+优点： 在 master 宕机时，消费者可以从 slave 读取消息，消息的实时性不会受影响，性能几乎和多 master 一样。<br>
+缺点：使用异步复制的同步方式有可能会有消息丢失的问题。</li>
+<li>多 master 多 slave 同步双写模式<br>
+同多 master 多 slave 异步复制模式类似，区别在于 master 和 slave 之间的数据同步方式。<br>
+优点：同步双写的同步模式能保证数据不丢失。<br>
+缺点：发送单个消息 RT 会略长，性能相比异步复制低10%左右。<br>
+刷盘策略：同步刷盘和异步刷盘（指的是节点自身数据是同步还是异步存储）<br>
+同步方式：同步双写和异步复制（指的一组 master 和 slave 之间数据的同步）<br>
+<strong>注意</strong>：要保证数据可靠，需采用同步刷盘和同步双写的方式，但性能会较其他方式低。</li>
+</ol>
+<h2>RocketMQ 单主部署</h2>
+<p>鉴于是快速入门，我选择的是第一种单 master 的部署模式。先说明一下我的安装环境：</p>
+<ol>
+<li>Centos 7.2</li>
+<li>jdk 1.8</li>
+<li>Maven 3.2.x</li>
+<li>Git</li>
+</ol>
+<p>这里 git 可用可不用，主要是用来直接下载 github 上的源码。也可以选择自己到<br>
+github 上下载，然后上传到服务器上。以git操作为示例。</p>
+<ol>
+<li>clone 源码并用 maven 编译</li>
+</ol>
+<pre class="hljs bash"><code class="bash">&gt; git <span class="hljs-built_in">clone</span> https://github.com/alibaba/RocketMQ.git /opt/RocketMQ
+&gt; <span class="hljs-built_in">cd</span> /opt/RocketMQ &amp;&amp; mvn -Dmaven.test.skip=<span class="hljs-literal">true</span> clean package install assembly:assembly -U
+&gt; <span class="hljs-built_in">cd</span> target/alibaba-rocketmq-broker/alibaba-rocketmq
+</code></pre>
+<p><strong>此处可能遇到的问题</strong><br>
+一、执行"git clone <a href="https://link.jianshu.com?t=https%3A%2F%2Fgithub.com%2Falibaba%2FRocketMQ.git" target="_blank" rel="nofollow">https://github.com/alibaba/RocketMQ.git</a> /home/inspkgs/RocketMQ"时出现以下提示：</p>
+<pre class="hljs python"><code class="python">fatal: unable to access <span class="hljs-string">'https://github.com/alibaba/RocketMQ.git/'</span>: Could <span class="hljs-keyword">not</span> resolve host: github.com; Unknown error
+</code></pre>
+<p>解决办法：一般是由于网络原因造成的，执行以下命令</p>
+<pre class="hljs css"><code class="css">&gt; <span class="hljs-selector-tag">ping</span> <span class="hljs-selector-tag">github</span><span class="hljs-selector-class">.com</span>
+</code></pre>
+<p>确定可以 ping 通之后，再重新执行 git clone 命令。<br>
+二、执行"mvn -Dmaven.test.skip=true clean package install assembly:assembly -U"编译时，可能出现下载相关jar很慢的情况。<br>
+这也是由于默认 maven 中央仓库在国外的原因，可以根据需要在 /home/maven/conf/setting.xml 中的 <mirrors></mirrors> 添加以下内容后重新编译：</p>
+<pre class="hljs xml"><code class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">mirror</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">id</span>&gt;</span>aliyun<span class="hljs-tag"><!--<span class="hljs-name"-->id</span>&gt;
+    <span class="hljs-tag">&lt;<span class="hljs-name">mirrorOf</span>&gt;</span>central<span class="hljs-tag"><!--<span class="hljs-name"-->mirrorOf</span>&gt;
+    <span class="hljs-tag">&lt;<span class="hljs-name">name</span>&gt;</span>aliyun maven<span class="hljs-tag"><!--<span class="hljs-name"-->name</span>&gt;
+    <span class="hljs-tag">&lt;<span class="hljs-name">url</span>&gt;</span>http://maven.aliyun.com/nexus/content/groups/public/<span class="hljs-tag"><!--<span class="hljs-name"-->url</span>&gt;
+<span class="hljs-tag"><!--<span class="hljs-name"-->mirror</span>&gt;
+</code></pre>
+<ol start="2">
+<li>启动 Name Server</li>
+</ol>
+<pre class="hljs cpp"><code class="cpp">&gt; nohup sh /opt/RocketMQ/bin/mqnamesrv &amp;
+<span class="hljs-comment">//执行 jps 查看进程</span>
+&gt; jps
+<span class="hljs-number">25913</span> NamesrvStartup
+<span class="hljs-comment">//查看日志确保服务已正常启动</span>
+&gt; tail -f ~/logs/rocketmqlogs/namesrv.<span class="hljs-built_in">log</span>
+The Name Server boot success...
+</code></pre>
+<ol start="3">
+<li>启动 broker</li>
+</ol>
+<pre class="hljs cpp"><code class="cpp">&gt; nohup sh /opt/RocketMQ/bin/mqbroker -n localhost:<span class="hljs-number">9876</span> &amp;
+<span class="hljs-comment">//执行 jps 查看进程</span>
+&gt; jps
+<span class="hljs-number">25954</span> BrokerStartup
+<span class="hljs-comment">//查看日志确保服务已正常启动</span>
+&gt; tail -f ~/logs/rocketmqlogs/broker.<span class="hljs-built_in">log</span>
+The broker[broker-a, <span class="hljs-number">10.1</span><span class="hljs-number">.54</span><span class="hljs-number">.121</span>:<span class="hljs-number">10911</span>] boot success...
+</code></pre>
+<ol start="4">
+<li>发送和接收消息<br>
+发送/接收消息之前,我们需要告诉客户端 NameServer 地址。RocketMQ 提供了多种方式来实现这一目标。为简单起见,我们使用环境变量 NAMESRV_ADDR。</li>
+</ol>
+<pre class="hljs bash"><code class="bash">&gt; <span class="hljs-built_in">export</span> NAMESRV_ADDR=localhost:9876
+&gt; sh /opt/RocketMQ/bin/tools.sh com.alibaba.rocketmq.example.quickstart.Producer
+SendResult [sendStatus=SEND_OK, msgId= ...
+&gt; sh /opt/RocketMQ/bin/tools.sh com.alibaba.rocketmq.example.quickstart.Consumer
+ConsumeMessageThread_%d Receive New Messages: [MessageExt...
+</code></pre>
+<ol start="5">
+<li>关闭服务</li>
+</ol>
+<pre class="hljs python"><code class="python">&gt; sh /opt/RocketMQ/bin/mqshutdown broker
+The mqbroker(<span class="hljs-number">36695</span>) <span class="hljs-keyword">is</span> running...
+Send shutdown request to mqbroker(<span class="hljs-number">36695</span>) OK
+&gt; sh /opt/RocketMQ/bin/mqshutdown namesrv
+The mqnamesrv(<span class="hljs-number">36664</span>) <span class="hljs-keyword">is</span> running...
+Send shutdown request to mqnamesrv(<span class="hljs-number">36664</span>) OK
+</code></pre>
+<h2>生产者、消费者 Demo</h2>
+<ol>
+<li>生产者</li>
+</ol>
+<pre class="hljs java"><code class="java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Producer</span> </span>{
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> MQClientException, InterruptedException </span>{
+
+        <span class="hljs-comment">//声明并初始化一个producer</span>
+        <span class="hljs-comment">//需要一个producer group名字作为构造方法的参数，这里为producer1</span>
+        DefaultMQProducer producer = <span class="hljs-keyword">new</span> DefaultMQProducer(<span class="hljs-string">"producer1"</span>);
+
+        <span class="hljs-comment">//设置NameServer地址,此处应改为实际NameServer地址，多个地址之间用；分隔</span>
+        <span class="hljs-comment">//NameServer的地址必须有，但是也可以通过环境变量的方式设置，不一定非得写死在代码里</span>
+        producer.setNamesrvAddr(<span class="hljs-string">"10.1.54.121:9876;10.1.54.122:9876"</span>);
+
+        <span class="hljs-comment">//调用start()方法启动一个producer实例</span>
+        producer.start();
+
+        <span class="hljs-comment">//发送10条消息到Topic为TopicTest，tag为TagA，消息内容为“Hello RocketMQ”拼接上i的值</span>
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++) {
+            <span class="hljs-keyword">try</span> {
+                Message msg = <span class="hljs-keyword">new</span> Message(<span class="hljs-string">"TopicTest"</span>,<span class="hljs-comment">// topic</span>
+                        <span class="hljs-string">"TagA"</span>,<span class="hljs-comment">// tag</span>
+                        (<span class="hljs-string">"Hello RocketMQ "</span> + i).getBytes(RemotingHelper.DEFAULT_CHARSET)<span class="hljs-comment">// body</span>
+                );
+
+                <span class="hljs-comment">//调用producer的send()方法发送消息</span>
+                <span class="hljs-comment">//这里调用的是同步的方式，所以会有返回结果</span>
+                SendResult sendResult = producer.send(msg);
+
+                <span class="hljs-comment">//打印返回结果，可以看到消息发送的状态以及一些相关信息</span>
+                System.out.println(sendResult);
+            } <span class="hljs-keyword">catch</span> (Exception e) {
+                e.printStackTrace();
+                Thread.sleep(<span class="hljs-number">1000</span>);
+            }
+        }
+
+        <span class="hljs-comment">//发送完消息之后，调用shutdown()方法关闭producer</span>
+        producer.shutdown();
+    }
+}
+</code></pre>
+<ol start="2">
+<li>消费者</li>
+</ol>
+<pre class="hljs java"><code class="java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Consumer</span> </span>{
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> InterruptedException, MQClientException </span>{
+
+        <span class="hljs-comment">//声明并初始化一个consumer</span>
+        <span class="hljs-comment">//需要一个consumer group名字作为构造方法的参数，这里为consumer1</span>
+        DefaultMQPushConsumer consumer = <span class="hljs-keyword">new</span> DefaultMQPushConsumer(<span class="hljs-string">"consumer1"</span>);
+
+        <span class="hljs-comment">//同样也要设置NameServer地址</span>
+        consumer.setNamesrvAddr(<span class="hljs-string">"10.1.54.121:9876;10.1.54.122:9876"</span>);
+
+        <span class="hljs-comment">//这里设置的是一个consumer的消费策略</span>
+        <span class="hljs-comment">//CONSUME_FROM_LAST_OFFSET 默认策略，从该队列最尾开始消费，即跳过历史消息</span>
+        <span class="hljs-comment">//CONSUME_FROM_FIRST_OFFSET 从队列最开始开始消费，即历史消息（还储存在broker的）全部消费一遍</span>
+        <span class="hljs-comment">//CONSUME_FROM_TIMESTAMP 从某个时间点开始消费，和setConsumeTimestamp()配合使用，默认是半个小时以前</span>
+        consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
+
+        <span class="hljs-comment">//设置consumer所订阅的Topic和Tag，*代表全部的Tag</span>
+        consumer.subscribe(<span class="hljs-string">"TopicTest"</span>, <span class="hljs-string">"*"</span>);
+
+        <span class="hljs-comment">//设置一个Listener，主要进行消息的逻辑处理</span>
+        consumer.registerMessageListener(<span class="hljs-keyword">new</span> MessageListenerConcurrently() {
+
+            <span class="hljs-meta">@Override</span>
+            <span class="hljs-function"><span class="hljs-keyword">public</span> ConsumeConcurrentlyStatus <span class="hljs-title">consumeMessage</span><span class="hljs-params">(List<messageext> msgs,
+                                                            ConsumeConcurrentlyContext context)</messageext></span> </span>{
+
+                System.out.println(Thread.currentThread().getName() + <span class="hljs-string">" Receive New Messages: "</span> + msgs);
+
+                <span class="hljs-comment">//返回消费状态</span>
+                <span class="hljs-comment">//CONSUME_SUCCESS 消费成功</span>
+                <span class="hljs-comment">//RECONSUME_LATER 消费失败，需要稍后重新消费</span>
+                <span class="hljs-keyword">return</span> ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
+            }
+        });
+
+        <span class="hljs-comment">//调用start()方法启动consumer</span>
+        consumer.start();
+
+        System.out.println(<span class="hljs-string">"Consumer Started."</span>);
+    }
+}
+</code></pre>
+<p></p></div><br><br></div>
+                    <div class="s-weixin">
+                        <ul class="weimg1">
+                            <li><strong>微信</strong></li>
+                            <li>赶快加我聊天吧</li>
+                            <li><img src="../img/weixin.jpg"></li>
+                        </ul>
+                        <ul class="weimg2">
+                            <li><strong>博客交流群</strong></li>
+                            <li>海纳百川，大家来水</li>
+                            <li><img src="../img/qqGroup.jpg" alt="weinxin"></li>
+                        </ul>
+                        <div class="clear"></div>
+                    </div>
+                    <div class="clear"></div>
+                    <div id="social">
+                        <div class="social-main">
+                            <span class="like">
+                                <a href="javascript:;" data-action="ding" data-id="1" title="点赞"
+                                   class="favorite" onclick="increaseLikeCount()">
+                                    <i class="fa fa-thumbs-up"></i>赞
+                                    <i class="count"
+                                       id="count-31">0</i>
+                                </a>
+                            </span>
+                            <div class="shang-p">
+                                <div class="shang-empty"><span></span></div>
+                                <span class="shang-s">
+                                    <a onclick="PaymentUtils.show();" style="cursor:pointer">赏</a>
+                                </span>
+                            </div>
+                            <div class="share-sd">
+                                        <span class="share-s" style="margin-top: 25px!important;">
+                                            <a href="javascript:void(0)" id="share-s" title="分享">
+                                                <i class="fa fa-share-alt"></i>分享
+                                            </a>
+                                        </span>
+                                <div id="share">
+                                    <ul class="bdsharebuttonbox bdshare-button-style1-16" data-bd-bind="1503997585792">
+                                        <li><a title="更多" class="bds_more fa fa-plus-square" data-cmd="more"
+                                               onclick="return false;" href="31.htm#"></a></li>
+                                        <li><a title="分享到QQ空间" class="fa fa-qq" data-cmd="qzone" onclick="return false;"
+                                               href="31.htm#"></a></li>
+                                        <li><a title="分享到新浪微博" class="fa fa-weibo" data-cmd="tsina"
+                                               onclick="return false;" href="31.htm#"></a></li>
+                                        <li><a title="分享到腾讯微博" class="fa fa-pinterest-square" data-cmd="tqq"
+                                               onclick="return false;" href="31.htm#"></a></li>
+                                        <li><a title="分享到人人网" class="fa fa-renren" data-cmd="renren"
+                                               onclick="return false;" href="31.htm#"></a></li>
+                                        <li><a title="分享到微信" class="fa fa-weixin" data-cmd="weixin"
+                                               onclick="return false;" href="31.htm#"></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+
+                    <footer class="single-footer">
+                        <ul class="single-meta">
+                            <li class="comment">
+                                <a href="31.htm#comments"
+                                   rel="external nofollow">
+                                    <i class="fa fa-comment-o"></i>
+                                    <i class="comment-count">0</i>
+                                </a>
+                            </li>
+                            <li class="views">
+                                <i class="fa fa-eye"></i> <span
+                                    class="articleViewCount">3</span>
+                                views
+                            </li>
+                            <li class="r-hide">
+                                <a href="javascript:pr()" title="侧边栏">
+                                    <i class="fa fa-caret-left"></i>
+                                    <i class="fa fa-caret-right"></i>
+                                </a>
+                            </li>
+                        </ul>
+                        <ul id="fontsize">
+                            <li>A+</li>
+                        </ul>
+                        <div class="single-cat-tag">
+                            <div class="single-cat">所属分类：
+                                <a href="../category/15.htm">
+                                            其他技术</a>
+                                <a href="../category/16.htm">
+                                            消息服务</a>
+                                </div>
+                        </div>
+                    </footer><!-- .entry-footer -->
+
+
+                    <div class="clear"></div>
+                </div><!-- .entry-content -->
+            </article><!-- #post -->
+
+                <div class="single-tag">
+                <ul class="" data-wow-delay="0.3s">
+                    <li>
+                            <a href="../tag/38.htm" rel="tag"
+                               style="background:#666666">
+                                    RocketMQ</a>
+                        </li>
+                    </ul>
+            </div>
+                <div class="authorbio wow fadeInUp">
+                <img alt="言曌" src="http://localhost:8081/uploads/2017/10/20171006225356181.jpg"
+                     class="avatar avatar-64 photo" height="64" width="64">
+                <ul class="postinfo">
+                    <li></li>
+                    <li><strong>版权声明：</strong>本站原创文章，于2018-11-25，由
+                        <strong>
+                                言曌</strong>
+                        发表。
+                    </li>
+                    <li class="reprinted"><strong>转载请注明：</strong>
+                        <a href="31.htm"
+                           rel="bookmark"
+                           title="本文固定链接 /article/31">
+                                RocketMQ 实战之快速入门 | 风吟博客</a>
+                    </li>
+                </ul>
+                <div class="clear"></div>
+            </div>
+                <div id="single-widget">
+                <div class="wow fadeInUp" data-wow-delay="0.3s">
+                    <aside id="related_post-2" class="widget">
+                        <h3 class="widget-title">
+                            <span class="s-icon"></span>相关文章
+                        </h3>
+                        <div id="related_post_widget">
+                            <ul>
+                                <li>
+                                        <a href="26.htm">SpringBoot 整合 elasticsearch 实例</a>
+                                    </li>
+                                <li>
+                                        <a href="32.htm">Docker_入门？只要这篇就够了！（纯干货适合0基础小白）</a>
+                                    </li>
+                                <li>
+                                        <a href="31.htm">RocketMQ 实战之快速入门</a>
+                                    </li>
+                                <li>
+                                        <a href="31.htm">RocketMQ 实战之快速入门</a>
+                                    </li>
+                                <li>
+                                        <a href="29.htm">IDEA启动EDAS项目</a>
+                                    </li>
+                                </ul>
+                        </div>
+                        <div class="clear"></div>
+                    </aside>
+                        <aside id="hot_post-8" class="widget hot_post">
+                        <h3 class="widget-title"><span class="s-icon"></span>猜你喜欢</h3>
+                        <div id="hot_post_widget">
+                            <ul>
+                                <li>
+                                        <a href="1.htm">
+                                                [转载]SpringMVC中使用Interceptor拦截器</a>
+                                    </li>
+                                <li>
+                                        <a href="2.htm">
+                                                springmvc 表单中文乱码解决方案</a>
+                                    </li>
+                                <li>
+                                        <a href="4.htm">
+                                                [转载]HTTP的幂等性</a>
+                                    </li>
+                                <li>
+                                        <a href="33.htm">
+                                                MySQL常用命令语句</a>
+                                    </li>
+                                <li>
+                                        <a href="11.htm">
+                                                Java如何让程序一直运行，不停止</a>
+                                    </li>
+                                </ul>
+                        </div>
+                        <div class="clear"></div>
+                    </aside>
+                        </div>
+                <div class="clear"></div>
+            </div>
+                <nav class="nav-single">
+                <a href="1.htm" rel="next">
+                            <span class="meta-nav">
+                                <span class="post-nav">上一篇
+                                 <i class="fa fa-angle-left"></i>
+                                </span>
+                                <br>[转载]SpringMVC中使用Interceptor拦截器</span>
+                        </a>
+                    <a href="32.htm" rel="next">
+                            <span class="meta-nav">
+                                <span class="post-nav">下一篇
+                                 <i class="fa fa-angle-right"></i>
+                                </span>
+                                <br>Docker_入门？只要这篇就够了！（纯干货适合0基础小白）</span>
+                        </a>
+                    <div class="clear"></div>
+            </nav>
+                <div class="scroll-comments"></div>
+            <div id="comments" class="comments-area">
+                <div id="respond" class="comment-respond">
+                    <h3 id="reply-title" class="comment-reply-title"><span id="reply-title-word">发表评论</span>
+                        <a rel="nofollow" id="cancel-comment-reply-link"
+                           href="31.htm#respond"
+                           style="">取消回复</a>
+                    </h3>
+                    <form id="comment_form" method="post">
+                        <p class="comment-form-comment">
+                            <textarea id="comment" name="commentContent" rows="4" tabindex="1" required></textarea>
+                        </p>
+                        <div id="comment-author-info">
+                            <input type="hidden" name="commentPid" value="0">
+                            <input type="hidden" name="commentPname" value="">
+                            <input type="hidden" name="commentRole" value="0">
+                                <p class="comment-form-author">
+                                    <label for="author_name">
+                                        昵称<span class="required">*</span>
+                                    </label>
+                                    <input type="text" name="commentAuthorName" id="author_name" class="" value=""
+                                           tabindex="2" required>
+                                </p>
+                                <p class="comment-form-email">
+                                    <label for="author_email">
+                                        邮箱<span class="required">*</span>
+                                    </label>
+                                    <input type="email" name="commentAuthorEmail" id="author_email" class="" value=""
+                                           tabindex="3" required>
+                                </p>
+                                <p class="comment-form-url">
+                                    <label for="author_url">网址</label>
+                                    <input type="url" name="commentAuthorUrl" id="author_url" class="" value=""
+                                           tabindex="4">
+                                </p>
+                            </div>
+                        <div class="clear"></div>
+                        <p class="form-submit">
+                            <input id="submit" name="submit" type="submit" tabindex="5" value="提交评论">
+                            <input type="hidden" name="commentArticleId"
+                                   value="31" id="article_id">
+                            <input type="hidden" name="commentPid" id="comment_pid" value="0">
+                        </p>
+                    </form>
+                </div>
+
+                <ol class="comment-list">
+                    </ol>
+            </div>
+                </main>
+        <!-- .site-main -->
+    </div>
+    <div id="sidebar" class="widget-area all-sidebar"
+     style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
+
+        <aside class="widget widget_search">
+            <div class="searchbar">
+                <form method="get" id="searchform1" action="http://localhost:8081/search">
+                    <span> <input type="text" value="" name="keywords" id="s1" placeholder="输入搜索内容" required="">
+                        <button type="submit" id="searchsubmit1">搜索</button>
+                    </span>
+                </form>
+            </div>
+            <div class="clear"></div>
+        </aside>
+        <aside class="widget hot_comment" >
+            <h3 class="widget-title">
+                <i class="fa fa-bars"></i>热评文章
+            </h3>
+            <div id="hot_comment_widget">
+                <ul>
+                    <li>
+                            <a href="17.htm" rel="bookmark" title=" (5条评论)">
+                                    java中ImageIcon路径问题</a>
+                        </li>
+                    <li>
+                            <a href="14.htm" rel="bookmark" title=" (3条评论)">
+                                    execute、executeUpdate、executeQuery三者的区别</a>
+                        </li>
+                    <li>
+                            <a href="13.htm" rel="bookmark" title=" (3条评论)">
+                                    sql语句分为三类(DML,DDL,DCL)-介绍</a>
+                        </li>
+                    <li>
+                            <a href="8.htm" rel="bookmark" title=" (3条评论)">
+                                    Mybatis高级映射多对多查询</a>
+                        </li>
+                    <li>
+                            <a href="11.htm" rel="bookmark" title=" (2条评论)">
+                                    Java如何让程序一直运行，不停止</a>
+                        </li>
+                    <li>
+                            <a href="9.htm" rel="bookmark" title=" (2条评论)">
+                                    Servlet 实现验证码</a>
+                        </li>
+                    <li>
+                            <a href="6.htm" rel="bookmark" title=" (2条评论)">
+                                    Hibernate 简单的CURD操作</a>
+                        </li>
+                    <li>
+                            <a href="2.htm" rel="bookmark" title=" (2条评论)">
+                                    springmvc 表单中文乱码解决方案</a>
+                        </li>
+                    </ul>
+            </div>
+            <div class="clear"></div>
+        </aside>
+        <aside class="widget">
+            <h3 class="widget-title">
+                <i class="fa fa-bars"></i>所有标签
+            </h3>
+            <div class="tagcloud">
+                <a href="../index.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Java</a>
+                <a href="../tag/2.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            算法</a>
+                <a href="../tag/3.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            数据结构</a>
+                <a href="../tag/4.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            C</a>
+                <a href="../tag/5.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            操作系统</a>
+                <a href="../tag/6.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            计算机网络</a>
+                <a href="../tag/8.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            面试题</a>
+                <a href="../tag/9.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            数据库</a>
+                <a href="../tag/10.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            MySQL</a>
+                <a href="../tag/11.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Spring</a>
+                <a href="../tag/12.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            SpringMVC</a>
+                <a href="../tag/13.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            MyBatis</a>
+                <a href="../tag/14.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            JVM</a>
+                <a href="../tag/15.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            设计模式</a>
+                <a href="../tag/16.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            网络编程</a>
+                <a href="../tag/17.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            IO</a>
+                <a href="../tag/18.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            JSP</a>
+                <a href="../tag/19.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Servlet</a>
+                <a href="../tag/20.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            JavaWeb</a>
+                <a href="../tag/21.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Hibernate</a>
+                <a href="../tag/22.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            SQL</a>
+                <a href="../tag/24.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Redis</a>
+                <a href="../tag/25.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            SPA</a>
+                <a href="../tag/26.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            SpringCloud</a>
+                <a href="../tag/27.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Dubbo</a>
+                <a href="../tag/28.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            EDAS</a>
+                <a href="../tag/29.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            MongoDB</a>
+                <a href="../tag/31.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            SpringBoot</a>
+                <a href="../tag/32.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            ElasticSearch</a>
+                <a href="../tag/33.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Docker</a>
+                <a href="../tag/34.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Jenkins</a>
+                <a href="../tag/35.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Vue</a>
+                <a href="../tag/36.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            IDEA</a>
+                <a href="../tag/37.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Shiro</a>
+                <a href="../tag/38.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            RocketMQ</a>
+                <div class="clear"></div>
+            </div>
+            <div class="clear"></div>
+        </aside>
+        <aside id="random_post-7" class="widget random_post wow fadeInUp" data-wow-delay="0.3s">
+            <h3 class="widget-title">
+                <i class="fa fa-bars"></i>随机文章
+            </h3>
+            <div id="random_post_widget">
+                <ul>
+                    <li>
+                            <a href="33.htm" rel="bookmark">
+                                    MySQL常用命令语句</a>
+                        </li>
+                    <li>
+                            <a href="14.htm" rel="bookmark">
+                                    execute、executeUpdate、executeQuery三者的区别</a>
+                        </li>
+                    <li>
+                            <a href="15.htm" rel="bookmark">
+                                    JSP 中 forward 转发 和 sendRedirect 重定向的区别</a>
+                        </li>
+                    <li>
+                            <a href="13.htm" rel="bookmark">
+                                    sql语句分为三类(DML,DDL,DCL)-介绍</a>
+                        </li>
+                    <li>
+                            <a href="16.htm" rel="bookmark">
+                                    Java中File类的使用</a>
+                        </li>
+                    <li>
+                            <a href="11.htm" rel="bookmark">
+                                    Java如何让程序一直运行，不停止</a>
+                        </li>
+                    <li>
+                            <a href="29.htm" rel="bookmark">
+                                    IDEA启动EDAS项目</a>
+                        </li>
+                    <li>
+                            <a href="17.htm" rel="bookmark">
+                                    java中ImageIcon路径问题</a>
+                        </li>
+                    </ul>
+            </div>
+            <div class="clear"></div>
+        </aside>
+        </div>
+</div>
+    <div class="clear"></div>
+    <footer id="colophon" class="site-footer" role="contentinfo">
+    <div class="site-info">
+        <p style="text-align: center;">Copyright © 2017
+            <a href="../default.html" target="_blank" rel="noopener noreferrer">风吟博客</a>
+            All rights reserved.
+            <a target="_blank" href="../map.htm" >
+                <span class="font-text">站点地图</span>
+            </a>
+        </p>
+    </div>
+    <!-- .site-info -->
+</footer><!-- .site-footer -->
+</div>
+
+<script src="../js/jquery.min.js"></script>
+<script src="../js/superfish.js"></script>
+<script src='../js/sticky.js'></script>
+<script src="../js/script.js"></script>
+<script src="../plugin/layui/layui.all.js"></script>
+
+
+<script src="../js/jquery.cookie.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            if ($('#author_name').val() == '') {
+                var author = localStorage.getItem("author");
+                $("#author_name").val(author == 'undefined' ? '' : author);
+            }
+            if ($('#author_email').val() == '') {
+                var email = localStorage.getItem("email");
+                $("#author_email").val(email == 'undefined' ? '' : email);
+            }
+            if ($('#author_url').val() == '') {
+                var url = localStorage.getItem("url");
+                $("#author_url").val(url == 'undefined' ? '' : url);
+            }
+        });
+
+        var articleId = $("#articleDetail").attr("data-id");
+        increaseViewCount(articleId);
+        layui.code({
+            elem: 'pre',//默认值为.layui-code
+            // skin: 'notepad', //如果要默认风格，不用设定该key。
+            about: false
+        });
+
+    </script>
+
+</body>
+</html>

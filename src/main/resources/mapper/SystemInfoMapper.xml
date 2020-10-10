@@ -1,0 +1,70 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeasion.blog.dao.SystemInfoDao">
+
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        <!-- -->
+        delete from system_info
+        where
+    </delete>
+
+    <insert id="insert" parameterType="com.jeasion.blog.pojo.SystemInfo">
+        <!-- -->
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into system_info (
+                PARAMETER_ID,                PARAMETER_NAME,                PARAMETER_VALUE,                USER_ID,                CREATED_TIME,                UPDATED_BY,                UPDATED_TIME        )
+        values (
+                #{ parameterId},                #{ parameterName},                #{ parameterValue},                #{ userId},                #{ createdTime},                #{ updatedBy},                #{ updatedTime}        )
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.jeasion.blog.pojo.SystemInfo">
+        <!-- -->
+        update system_info
+        set
+                PARAMETER_ID = #{ parameterId} ,                PARAMETER_NAME = #{ parameterName} ,                PARAMETER_VALUE = #{ parameterValue} ,                USER_ID = #{ userId} ,                CREATED_TIME = #{ createdTime} ,                UPDATED_BY = #{ updatedBy} ,                UPDATED_TIME = #{ updatedTime}         where
+    </update>
+
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        <!-- -->
+        select
+        <include refid="Base_Column_List" />
+        from system_info
+        where id = #{ id }
+    </select>
+
+    <select id="countForPage" parameterType="map" resultType="Long">
+        <!-- -->
+        select
+        count(*)
+        from
+        system_info
+        where 1=1
+        <if test="beginDate != null and beginDate != ''">
+            and create_date <![CDATA[>=]]>  #{beginDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            and  create_date <![CDATA[<=]]> #{endDate}
+        </if>
+    </select>
+
+    <select id="listForPage" parameterType="map" 	resultType="com.lzn.mybatisplus.codegenerator.export.SystemInfoVO">
+        <!-- -->
+        select
+        <include refid="Base_Column_List" />
+        from
+        system_info
+        where 1=1
+        <if test="beginDate != null and beginDate != ''">
+            and create_date <![CDATA[>=]]>  #{beginDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            and  create_date <![CDATA[<=]]> #{endDate}
+        </if>
+        limit #{start}, #{limit}
+    </select>
+</mapper>

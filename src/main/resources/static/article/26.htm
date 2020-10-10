@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Cache-Control" content="max-age=72000"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="applicable-device" content="pc,mobile">
+    <meta name="MobileOptimized" content="width"/>
+    <meta name="HandheldFriendly" content="true"/>
+    <link rel="shortcut icon" href="../img/logo.png">
+    <meta name="description" content="风吟博客,一个简洁的Java博客,言曌程序学习的一个新起点。"/>
+    <meta name="keywords" content="风吟,风吟博客,Java博客,SSM博客,言曌,言曌博客"/>
+    <title>SpringBoot 整合 elasticsearch 实例</title>
+<link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../plugin/font-awesome/font-awesome/css/font-awesome.css">
+
+    <link rel="stylesheet" href="../css/highlight.css">
+        <style>
+            .entry-title {
+                background: #f8f8f8;
+            }
+        </style>
+    </head>
+<body>
+<div id="page" class="site" style="transform: none;">
+
+    <header id="masthead" class="site-header">
+    <nav id="top-header">
+        <div class="top-nav">
+            <div class="user-login">
+                <a href="http://localhost:8081/admin">登录</a>
+                    <a href="https://liuyanzhao.com/bulletin/my-service" target="_blank" style="color:red;">毕设代做/有偿服务</a>
+            </div>
+            <div class="menu-topmenu-container">
+                <ul id="menu-topmenu" class="top-menu">
+                    <li class="menu-item">
+                        </li>
+                    <li class="menu-item">
+                        <a href="../applyLink.htm" >
+                                    <i class="fa fa-link"></i>
+                                    <span class="font-text">申请友链&nbsp;</span>&nbsp;
+                                </a>
+                            </li>
+                    <li class="menu-item">
+                        <a href="../articleFile.htm" >
+                                    <i class="fa-list-alt fa"></i>
+                                    <span class="font-text">文章归档&nbsp;</span>&nbsp;
+                                </a>
+                            </li>
+                    <li class="menu-item">
+                        </li>
+                    <li class="menu-item">
+                        <a href="../aboutSite.htm" >
+                                    <i class="fa fa-info"></i>
+                                    <span class="font-text">关于本站&nbsp;</span>&nbsp;
+                                </a>
+                            </li>
+                    </ul>
+            </div>
+        </div>
+    </nav><!-- #top-header -->
+    <div id="menu-box">
+        <div id="top-menu">
+                <span class="nav-search">
+                    <i class="fa fa-search"></i>
+                </span>
+            <div class="logo-site"><h1 class="site-title">
+                <a href="../default.html" title="风吟博客">风吟博客</a>
+            </h1>
+                <p class="site-description">莫问收获，但问耕耘。</p>
+            </div><!-- .logo-site -->
+            <div id="site-nav-wrap">
+                <div id="sidr-close">
+                    <a href="26.htm#sidr-close" class="toggle-sidr-close">×</a>
+                </div>
+                <nav id="site-nav" class="main-nav">
+                    <a href="26.htm#sidr-main" id="navigation-toggle" class="bars">
+                        <i class="fa fa-bars"></i>
+                    </a>
+                    <div class="menu-pcmenu-container">
+                        <ul id="menu-pcmenu" class="down-menu nav-menu sf-js-enabled sf-arrows">
+
+                            <li>
+                                <a href="../default.html">
+                                    <i class="fa-home fa"></i>
+                                    <span class="font-text">首页</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                        <a href="../category/1.htm">
+                                            <i class="fa fa-coffee"></i>
+                                            <span class="font-text">Java&nbsp;</span>
+                                        </a>
+                                        <ul class="sub-menu">
+                                            <li>
+                                                        <a href="../category/2.htm" target="_blank">Java基础</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/3.htm" target="_blank">Core Java</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/4.htm" target="_blank">多线程并发编程</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/5.htm" target="_blank">Sockets和IO</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/6.htm" target="_blank">设计模式和反射</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/7.htm" target="_blank">JVM</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/8.htm" target="_blank">JavaWeb</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/9.htm" target="_blank">Java框架</a>
+                                                    </li>
+                                                </ul>
+                                    </li>
+                                <li>
+                                        <a href="../category/10.htm">
+                                            <i class="fa fa-cubes"></i>
+                                            <span class="font-text">计算机科学&nbsp;</span>
+                                        </a>
+                                        <ul class="sub-menu">
+                                            <li>
+                                                        <a href="../category/11.htm" target="_blank">数据结构和算法</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/12.htm" target="_blank">操作系统</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/13.htm" target="_blank">数据库</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/14.htm" target="_blank">计算机网络</a>
+                                                    </li>
+                                                </ul>
+                                    </li>
+                                <li>
+                                        <a href="../category/15.htm">
+                                            <i class="fa-snowflake-o fa"></i>
+                                            <span class="font-text">其他技术&nbsp;</span>
+                                        </a>
+                                        <ul class="sub-menu">
+                                            <li>
+                                                        <a href="../category/16.htm" target="_blank">消息服务</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/17.htm" target="_blank">缓存服务</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/100000003.htm" target="_blank">微服务</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/100000004.htm" target="_blank">搜索引擎</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/100000005.htm" target="_blank">权限框架</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/100000006.htm" target="_blank">开发利器</a>
+                                                    </li>
+                                                </ul>
+                                    </li>
+                                <li>
+                                        <a href="https://leetcode.com/problemset/all">
+                                            <i class="ssss"></i>
+                                            <span class="font-text">LeetCode&nbsp;</span>
+                                        </a>
+                                    </li>
+                                <li>
+                                        <a href="../message.htm">
+                                            <i class="fa fa-comment"></i>
+                                            <span class="font-text">留言板&nbsp;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                    </div>
+                </nav>
+            </div>
+            <div class="clear"></div>
+        </div><!-- #top-menu -->
+    </div><!-- #menu-box -->
+    </header><!-- #masthead -->
+<div id="search-main">
+    <div class="searchbar">
+        <form method="get" id="searchform" action="http://localhost:8081/search" accept-charset="UTF-8">
+            <span>
+                <input type="text" value="" name="keywords" id="s" placeholder="输入搜索内容"required="">
+                <button type="submit" id="searchsubmit">搜索</button>
+            </span>
+        </form>
+    </div>
+    <div class="clear"></div>
+</div>
+<nav class="breadcrumb">
+        <a class="crumbs" href="../default.html">
+            <i class="fa fa-home"></i>首页
+        </a>
+        <i class="fa fa-angle-right"></i>
+                    <a href="../category/15.htm">
+                            其他技术</a>
+                <i class="fa fa-angle-right"></i>
+                    <a href="../category/100000004.htm">
+                            搜索引擎</a>
+                <i class="fa fa-angle-right"></i>
+        正文
+    </nav>
+    <div id="content" class="site-content" style="transform: none;">
+        <div id="primary" class="content-area">
+        <main id="main" class="site-main" role="main">
+            <article class="post" id="articleDetail" data-id="26">
+                <header class="entry-header">
+                    <h1 class="entry-title">
+                            SpringBoot 整合 elasticsearch 实例</h1>
+                </header><!-- .entry-header -->
+                <div class="entry-content">
+                    <div class="single-content">
+                            <p>上一篇文章介绍了安装&nbsp;<a href="https://liuyanzhao.com/7152.html" target="_blank" rel="noopener noreferrer">mac 上安装 elasticsearch</a></p><p>本文介绍&nbsp;<a href="https://liuyanzhao.com/tag/springboot/" title="查看与 SpringBoot 相关的文章" target="_blank">SpringBoot</a>&nbsp;集成 elasticsearch</p><p>&nbsp;</p><h2>一、下载 并启动 elasticsearch</h2><p>下载地址：<a href="https://liuyanzhao.com/wp-content/themes/begin/inc/go.php?url=https://www.elastic.co/downloads/past-releases" target="_blank" rel="noopener noreferrer">https://www.elastic.co/downloads/past-releases</a></p><p>选择一个版本，下载</p><p>博主这里测试使用的是 2.4.4</p><p>下载方式可以选择 ZIP 包</p><p>&nbsp;</p><p>启动的话，windows 和 mac 有些细微区别</p><p>windows ：进入文件目录下的 bin，然后点击 elasticsearch.bat 即可</p><p>mac：在终端执行命令 bin/elasticsearch</p><p>&nbsp;</p><p>&nbsp;</p><h2>二、配置 Maven</h2><div class="dp-highlighter"><div class="bar"></div><ol class="dp-xml" start="1"><li class="alt"><span class="comments">&lt;!--&nbsp;Spring&nbsp;Boot&nbsp;Elasticsearch&nbsp;依赖&nbsp;--&gt;</span></li><li class=""><span class="tag">&lt;</span><span class="tag-name">dependency</span><span class="tag">&gt;</span></li><li class="alt">&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">groupId</span><span class="tag">&gt;</span>org.springframework.boot<span class="tag">&lt;/</span><span class="tag-name">groupId</span><span class="tag">&gt;</span></li><li class="">&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">artifactId</span><span class="tag">&gt;</span>spring-boot-starter-data-elasticsearch<span class="tag">&lt;/</span><span class="tag-name">artifactId</span><span class="tag">&gt;</span></li><li class="alt"><span class="tag">&lt;/</span><span class="tag-name">dependency</span><span class="tag">&gt;</span></li></ol></div><p>&nbsp;</p><div class="dp-highlighter"><div class="bar"></div><ol class="dp-xml" start="1"><li class="alt"><span class="tag">&lt;</span><span class="tag-name">properties</span><span class="tag">&gt;</span></li><li class="">&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">elasticsearch.version</span><span class="tag">&gt;</span>2.4.4<span class="tag">&lt;/</span><span class="tag-name">elasticsearch.version</span><span class="tag">&gt;</span></li><li class="alt"><span class="tag">&lt;/</span><span class="tag-name">properties</span><span class="tag">&gt;</span></li></ol></div><p>&nbsp;</p><p>&nbsp;</p><p>添加&nbsp;spring-boot-starter-data-elasticsearch 依赖，并设置&nbsp;elasticsearch 版本为 2.4.4</p><p>&nbsp;</p><p>ES 和 SpirngBoot 版本参考：</p><p><a href="https://liuyanzhao.com/wp-content/themes/begin/inc/go.php?url=https://github.com/spring-projects/spring-data-elasticsearch/wiki/Spring-Data-Elasticsearch---Spring-Boot---version-matrix" target="_blank" rel="noopener noreferrer">https://github.com/spring-projects/spring-data-elasticsearch/wiki/Spring-Data-Elasticsearch---Spring-Boot---version-matrix</a></p><p>&nbsp;</p><h2>三、修改 application.properties</h2><div class="dp-highlighter"><div class="bar"></div><ol class="dp-xml" start="1"><li class="alt">#Project</li><li class=""><span class="attribute">server.port</span>=<span class="attribute-value">8080</span></li><li class="alt"><span class="attribute">debug</span>=<span class="attribute-value">true</span></li><li class=""><span class="attribute">server.context-path</span>=/chuyun</li><li class="alt"></li><li class=""></li><li class="alt">#&nbsp;DataSource</li><li class=""><span class="attribute">spring.datasource.driver-class-name</span>=<span class="attribute-value">com</span>.mysql.jdbc.Driver</li><li class="alt"><span class="attribute">spring.datasource.username</span>=<span class="attribute-value">root</span></li><li class=""><span class="attribute">spring.datasource.password</span>=<span class="attribute-value">123456</span></li><li class="alt"><span class="attribute">spring.datasource.url</span>=<span class="attribute-value">jdbc</span>:mysql://localhost:3306/chuyun?<span class="attribute">characterEncodeing</span>=<span class="attribute-value">utf</span>-8&amp;<span class="attribute">useSSL</span>=<span class="attribute-value">false</span></li><li class=""></li><li class="alt">#&nbsp;JPA</li><li class=""><span class="attribute">spring.jpa.show-sql</span>=<span class="attribute-value">true</span></li><li class="alt"><span class="attribute">spring.jpa.hibernate.ddl-auto</span>=<span class="attribute-value">update</span></li><li class=""></li><li class="alt">#Thymeleaf</li><li class=""><span class="attribute">spring.thymeleaf.encoding</span>=<span class="attribute-value">UTF</span>-8</li><li class="alt"><span class="attribute">spring.thymeleaf.cache</span>=<span class="attribute-value">false</span></li><li class=""><span class="attribute">spring.thymeleaf.cache-period</span>=<span class="attribute-value">0</span></li><li class="alt"><span class="attribute">spring.template.cache</span>=<span class="attribute-value">false</span></li><li class=""><span class="attribute">spring.thymeleaf.mode</span>=<span class="attribute-value">HTML5</span></li><li class="alt"><span class="attribute">spring.thymeleaf.prefix</span>=<span class="attribute-value">classpath</span>:templates/</li><li class=""><span class="attribute">spring.thymeleaf.suffix</span>=.html</li><li class="alt"></li><li class=""></li><li class="alt">#Elasticsearch</li><li class=""><span class="attribute">spring.data.elasticsearch.cluster-nodes</span>=<span class="attribute-value">localhost</span>:9300</li><li class="alt"><span class="attribute">spring.data.elasticsearch.properties.transport.tcp.connect_timeout</span>=<span class="attribute-value">120s</span></li></ol></div><p>主要是添加最后面两条</p><p>&nbsp;</p><h2>四、创建 ES Bean 和 Repository</h2><p>Article.java</p><div class="dp-highlighter"><div class="bar"></div><ol class="dp-j" start="1"><li class="alt"><span class="keyword">package</span>&nbsp;com.liuyanzhao.chuyun.domain.es;</li><li class=""></li><li class="alt"><span class="keyword">import</span>&nbsp;org.springframework.data.elasticsearch.annotations.Document;</li><li class=""></li><li class="alt"><span class="keyword">import</span>&nbsp;javax.persistence.Id;</li><li class=""><span class="keyword">import</span>&nbsp;java.util.Date;</li><li class="alt"></li><li class=""><span class="comment">/**</span></li><li class="alt"><span class="comment">&nbsp;*&nbsp;@author&nbsp;言曌</span></li><li class=""><span class="comment">&nbsp;*&nbsp;@date&nbsp;2018/1/22&nbsp;下午4:45</span></li><li class="alt"><span class="comment">&nbsp;*/</span></li><li class=""></li><li class="alt"><span class="annotation">@Document</span>(indexName=<span class="string">"chuyun"</span>,type=<span class="string">"article"</span>,indexStoreType=<span class="string">"fs"</span>,shards=<span class="number">5</span>,replicas=<span class="number">1</span>,refreshInterval=<span class="string">"-1"</span>)</li><li class=""><span class="keyword">public</span>&nbsp;<span class="keyword">class</span>&nbsp;Article&nbsp;{</li><li class="alt"></li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//文章ID，这里必须为 id</span></li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;<span class="annotation">@Id</span></li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span>&nbsp;Long&nbsp;id;</li><li class="alt"></li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//标题</span></li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span>&nbsp;String&nbsp;title;</li><li class=""></li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//内容</span></li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span>&nbsp;String&nbsp;content;</li><li class="alt"></li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//浏览量</span></li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span>&nbsp;Integer&nbsp;viewCount;</li><li class=""></li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//发布时间</span></li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span>&nbsp;Date&nbsp;createTime;</li><li class="alt"></li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//更新时间</span></li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span>&nbsp;Date&nbsp;updateTime;</li><li class=""></li><li class="alt"></li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span>&nbsp;Article()&nbsp;{</li><li class="alt"></li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;}</li><li class="alt"></li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span>&nbsp;Long&nbsp;getId()&nbsp;{</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span>&nbsp;id;</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;}</li><li class="alt"></li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span>&nbsp;<span class="keyword">void</span>&nbsp;setId(Long&nbsp;id)&nbsp;{</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.id&nbsp;=&nbsp;id;</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;}</li><li class="alt"></li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span>&nbsp;String&nbsp;getTitle()&nbsp;{</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span>&nbsp;title;</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;}</li><li class="alt"></li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span>&nbsp;<span class="keyword">void</span>&nbsp;setTitle(String&nbsp;title)&nbsp;{</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.title&nbsp;=&nbsp;title;</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;}</li><li class="alt"></li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span>&nbsp;String&nbsp;getContent()&nbsp;{</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span>&nbsp;content;</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;}</li><li class="alt"></li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span>&nbsp;<span class="keyword">void</span>&nbsp;setContent(String&nbsp;content)&nbsp;{</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.content&nbsp;=&nbsp;content;</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;}</li><li class="alt"></li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span>&nbsp;Integer&nbsp;getViewCount()&nbsp;{</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span>&nbsp;viewCount;</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;}</li><li class="alt"></li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span>&nbsp;<span class="keyword">void</span>&nbsp;setViewCount(Integer&nbsp;viewCount)&nbsp;{</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.viewCount&nbsp;=&nbsp;viewCount;</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;}</li><li class="alt"></li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span>&nbsp;Date&nbsp;getCreateTime()&nbsp;{</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span>&nbsp;createTime;</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;}</li><li class="alt"></li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span>&nbsp;<span class="keyword">void</span>&nbsp;setCreateTime(Date&nbsp;createTime)&nbsp;{</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.createTime&nbsp;=&nbsp;createTime;</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;}</li><li class="alt"></li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span>&nbsp;Date&nbsp;getUpdateTime()&nbsp;{</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span>&nbsp;updateTime;</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;}</li><li class="alt"></li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span>&nbsp;<span class="keyword">void</span>&nbsp;setUpdateTime(Date&nbsp;updateTime)&nbsp;{</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.updateTime&nbsp;=&nbsp;updateTime;</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;}</li><li class="alt"></li><li class=""></li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;<span class="annotation">@Override</span></li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span>&nbsp;String&nbsp;toString()&nbsp;{</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span>&nbsp;<span class="string">"Article{"</span>&nbsp;+</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"id="</span>&nbsp;+&nbsp;id&nbsp;+</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">",&nbsp;title='"</span>&nbsp;+&nbsp;title&nbsp;+&nbsp;<span class="string">'\''</span>&nbsp;+</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">",&nbsp;content='"</span>&nbsp;+&nbsp;content&nbsp;+&nbsp;<span class="string">'\''</span>&nbsp;+</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">",&nbsp;viewCount="</span>&nbsp;+&nbsp;viewCount&nbsp;+</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">",&nbsp;createTime="</span>&nbsp;+&nbsp;createTime&nbsp;+</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">",&nbsp;updateTime="</span>&nbsp;+&nbsp;updateTime&nbsp;+</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'}';</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;}</li><li class="">}</li></ol></div><p>&nbsp;</p><p>ArticleRepository.java</p><div class="dp-highlighter"><div class="bar"></div><ol class="dp-j" start="1"><li class="alt"><span class="keyword">package</span>&nbsp;com.liuyanzhao.chuyun.repository.es;</li><li class=""></li><li class="alt"><span class="keyword">import</span>&nbsp;com.liuyanzhao.chuyun.domain.es.Article;</li><li class=""><span class="keyword">import</span>&nbsp;org.springframework.data.domain.Page;</li><li class="alt"><span class="keyword">import</span>&nbsp;org.springframework.data.domain.Pageable;</li><li class=""><span class="keyword">import</span>&nbsp;org.springframework.data.elasticsearch.repository.ElasticsearchRepository;</li><li class="alt"></li><li class=""><span class="comment">/**</span></li><li class="alt"><span class="comment">&nbsp;*&nbsp;@author&nbsp;言曌</span></li><li class=""><span class="comment">&nbsp;*&nbsp;@date&nbsp;2018/1/22&nbsp;下午5:05</span></li><li class="alt"><span class="comment">&nbsp;*/</span></li><li class=""></li><li class="alt"><span class="keyword">public</span>&nbsp;<span class="keyword">interface</span>&nbsp;ArticleRepository&nbsp;<span class="keyword">extends</span>&nbsp;ElasticsearchRepository&lt;Article,&nbsp;Long&gt;&nbsp;{</li><li class=""></li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;Page&lt;Article&gt;&nbsp;findDistinctByTitleContainingOrContentContaining(String&nbsp;title,&nbsp;String&nbsp;content,&nbsp;Pageable&nbsp;pageable);</li><li class="">}</li></ol></div><p>&nbsp;</p><p>&nbsp;</p><h2>五、创建测试类</h2><p>ArticleRepositoryTest.java</p><div class="dp-highlighter"><div class="bar"></div><ol class="dp-j" start="1"><li class="alt"><span class="keyword">package</span>&nbsp;com.liuyanzhao.chuyun.repository.es;</li><li class=""></li><li class="alt"><span class="keyword">import</span>&nbsp;com.liuyanzhao.chuyun.domain.es.Article;</li><li class=""><span class="keyword">import</span>&nbsp;com.liuyanzhao.chuyun.entity.User;</li><li class="alt"><span class="keyword">import</span>&nbsp;org.junit.Before;</li><li class=""><span class="keyword">import</span>&nbsp;org.junit.Test;</li><li class="alt"><span class="keyword">import</span>&nbsp;org.junit.runner.RunWith;</li><li class=""><span class="keyword">import</span>&nbsp;org.springframework.beans.factory.annotation.Autowired;</li><li class="alt"><span class="keyword">import</span>&nbsp;org.springframework.boot.test.context.<a href="https://liuyanzhao.com/tag/springboot/" title="查看与 SpringBoot 相关的文章" target="_blank">SpringBoot</a>Test;</li><li class=""><span class="keyword">import</span>&nbsp;org.springframework.data.domain.Page;</li><li class="alt"><span class="keyword">import</span>&nbsp;org.springframework.data.domain.PageRequest;</li><li class=""><span class="keyword">import</span>&nbsp;org.springframework.data.domain.Pageable;</li><li class="alt"><span class="keyword">import</span>&nbsp;org.springframework.test.context.junit4.SpringRunner;</li><li class=""></li><li class="alt"><span class="keyword">import</span>&nbsp;java.util.Date;</li><li class=""></li><li class="alt"><span class="comment">/**</span></li><li class=""><span class="comment">&nbsp;*&nbsp;@author&nbsp;言曌</span></li><li class="alt"><span class="comment">&nbsp;*&nbsp;@date&nbsp;2018/1/21&nbsp;下午5:03</span></li><li class=""><span class="comment">&nbsp;*/</span></li><li class="alt"></li><li class=""></li><li class="alt"><span class="annotation">@RunWith</span>(SpringRunner.<span class="keyword">class</span>)</li><li class=""><span class="annotation">@<a href="https://liuyanzhao.com/tag/springboot/" title="查看与 SpringBoot 相关的文章" target="_blank">SpringBoot</a>Test</span></li><li class="alt"><span class="keyword">public</span>&nbsp;<span class="keyword">class</span>&nbsp;ArticleRepositoryTest&nbsp;{</li><li class=""></li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;<span class="annotation">@Autowired</span></li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span>&nbsp;ArticleRepository&nbsp;articleRepository;</li><li class="alt"></li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;<span class="annotation">@Before</span></li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span>&nbsp;<span class="keyword">void</span>&nbsp;initRepositoryData()&nbsp;{</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//清除所有数据</span></li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;articleRepository.deleteAll();</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Article&nbsp;article&nbsp;=&nbsp;<span class="keyword">new</span>&nbsp;Article();</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;article.setId((<span class="keyword">long</span>)&nbsp;<span class="number">1</span>);</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;article.setTitle(<span class="string">"《蝶恋花》"</span>);</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;article.setContent(<span class="string">"槛菊愁烟兰泣露，罗幕轻寒，燕子双飞去。明月不谙离恨苦，斜光到晓穿朱户。昨夜西风凋碧树，独上高楼，望尽天涯路。欲寄彩笺兼尺素，山长水阔知何处？"</span>);</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;article.setCreateTime(<span class="keyword">new</span>&nbsp;Date());</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;article.setUpdateTime(<span class="keyword">new</span>&nbsp;Date());</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;article.setViewCount(<span class="number">678</span>);</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;articleRepository.save(article);</li><li class=""></li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Article&nbsp;article2&nbsp;=&nbsp;<span class="keyword">new</span>&nbsp;Article();</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;article2.setId((<span class="keyword">long</span>)&nbsp;<span class="number">2</span>);</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;article2.setTitle(<span class="string">"《蝶恋花》"</span>);</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;article2.setContent(<span class="string">"伫倚危楼风细细，望极春愁，黯黯生天际。草色烟光残照里，无言谁会凭阑意。拟把疏狂图一醉，对酒当歌，强乐还无味。衣带渐宽终不悔，为伊消得人憔悴。"</span>);</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;article2.setCreateTime(<span class="keyword">new</span>&nbsp;Date());</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;article2.setUpdateTime(<span class="keyword">new</span>&nbsp;Date());</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;article.setViewCount(<span class="number">367</span>);</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;articleRepository.save(article2);</li><li class="alt"></li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Article&nbsp;article3&nbsp;=&nbsp;<span class="keyword">new</span>&nbsp;Article();</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;article3.setId((<span class="keyword">long</span>)&nbsp;<span class="number">3</span>);</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;article3.setTitle(<span class="string">"《青玉案·元夕》"</span>);</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;article3.setContent(<span class="string">"东风夜放花千树，更吹落，星如雨。宝马雕车香满路。凤箫声动，玉壶光转，一夜鱼龙舞。蛾儿雪柳黄金缕，笑语盈盈暗香去。众里寻他千百度，蓦然回首，那人却在，灯火阑珊处。"</span>);</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;article3.setCreateTime(<span class="keyword">new</span>&nbsp;Date());</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;article3.setUpdateTime(<span class="keyword">new</span>&nbsp;Date());</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;article3.setViewCount(<span class="number">786</span>);</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;articleRepository.save(article3);</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;}</li><li class="alt"></li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;<span class="annotation">@Test</span></li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span>&nbsp;<span class="keyword">void</span>&nbsp;findDistinctByTitleContainingOrContentContainingTest()&nbsp;<span class="keyword">throws</span>&nbsp;Exception&nbsp;{</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pageable&nbsp;pageable&nbsp;=&nbsp;<span class="keyword">new</span>&nbsp;PageRequest(<span class="number">0</span>,<span class="number">20</span>);</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String&nbsp;title&nbsp;=&nbsp;<span class="string">"我爱罗琪"</span>;</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String&nbsp;content&nbsp;=&nbsp;<span class="string">"花千树"</span>;</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Page&lt;Article&gt;&nbsp;page&nbsp;=&nbsp;articleRepository.findDistinctByTitleContainingOrContentContaining(title,&nbsp;content,&nbsp;pageable);</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(page);</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"---start---"</span>);</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">for</span>(Article&nbsp;article&nbsp;:&nbsp;page.getContent())&nbsp;{</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(article.toString());</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"---end---"</span>);</li><li class=""></li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;}</li><li class=""></li><li class="alt">}</li></ol></div><p>&nbsp;</p><p>运行 @Test 注解的方法</p><p>根据 title 和 content 内容查到一条数据</p><p><img class="wp-image-7176 aligncenter" data-original="https://media.liuyanzhao.com/wp-content/uploads/2018/01/es9-1024x243.jpg" src="https://media.liuyanzhao.com/wp-content/uploads/2018/01/es9-1024x243.jpg" alt="SpringBoot 整合 elasticsearch 实例" width="652" height="155" srcset="https://media.liuyanzhao.com/wp-content/uploads/2018/01/es9-1024x243.jpg 1024w, https://media.liuyanzhao.com/wp-content/uploads/2018/01/es9-300x71.jpg 300w, https://media.liuyanzhao.com/wp-content/uploads/2018/01/es9-768x182.jpg 768w" sizes="(max-width: 652px) 100vw, 652px"></p><p>&nbsp;</p><p>修改 title 和 content</p><pre>String title = "蝶恋";
+String content = "东风";</pre><p>查到三条数据</p><p><img class="wp-image-7177 aligncenter" data-original="https://media.liuyanzhao.com/wp-content/uploads/2018/01/es10-1024x135.jpg" src="https://media.liuyanzhao.com/wp-content/uploads/2018/01/es10-1024x135.jpg" alt="SpringBoot 整合 elasticsearch 实例" width="654" height="86" srcset="https://media.liuyanzhao.com/wp-content/uploads/2018/01/es10-1024x135.jpg 1024w, https://media.liuyanzhao.com/wp-content/uploads/2018/01/es10-300x40.jpg 300w, https://media.liuyanzhao.com/wp-content/uploads/2018/01/es10-768x102.jpg 768w" sizes="(max-width: 654px) 100vw, 654px"></p><p>&nbsp;</p><h2>六、访问&nbsp;http://localhost:9200/_plugin/head/</h2><p>因为上一篇文章中，我们讲了装一个 head 插件，现在我们就能看到里面的数据了（多余的数据是之前测试的）</p><p><img class="wp-image-7182 aligncenter" data-original="https://media.liuyanzhao.com/wp-content/uploads/2018/01/es12-1024x363.jpg" src="https://media.liuyanzhao.com/wp-content/uploads/2018/01/es12-1024x363.jpg" alt="SpringBoot 整合 elasticsearch 实例" width="667" height="236" srcset="https://media.liuyanzhao.com/wp-content/uploads/2018/01/es12-1024x363.jpg 1024w, https://media.liuyanzhao.com/wp-content/uploads/2018/01/es12-300x106.jpg 300w, https://media.liuyanzhao.com/wp-content/uploads/2018/01/es12-768x272.jpg 768w" sizes="(max-width: 667px) 100vw, 667px"></p><h2></h2><h2>七、新建 Controller 类</h2><p>ArticleController.java</p><div class="dp-highlighter"><div class="bar"></div><ol class="dp-j" start="1"><li class="alt"><span class="keyword">package</span>&nbsp;com.liuyanzhao.chuyun.controller;</li><li class=""></li><li class="alt"><span class="keyword">import</span>&nbsp;com.liuyanzhao.chuyun.domain.es.Article;</li><li class=""><span class="keyword">import</span>&nbsp;com.liuyanzhao.chuyun.repository.es.ArticleRepository;</li><li class="alt"><span class="keyword">import</span>&nbsp;org.springframework.beans.factory.annotation.Autowired;</li><li class=""><span class="keyword">import</span>&nbsp;org.springframework.data.domain.Page;</li><li class="alt"><span class="keyword">import</span>&nbsp;org.springframework.data.domain.PageRequest;</li><li class=""><span class="keyword">import</span>&nbsp;org.springframework.data.domain.Pageable;</li><li class="alt"><span class="keyword">import</span>&nbsp;org.springframework.web.bind.annotation.RequestMapping;</li><li class=""><span class="keyword">import</span>&nbsp;org.springframework.web.bind.annotation.RequestParam;</li><li class="alt"><span class="keyword">import</span>&nbsp;org.springframework.web.bind.annotation.RestController;</li><li class=""></li><li class="alt"><span class="keyword">import</span>&nbsp;java.util.List;</li><li class=""></li><li class="alt"><span class="comment">/**</span></li><li class=""><span class="comment">&nbsp;*&nbsp;@author&nbsp;言曌</span></li><li class="alt"><span class="comment">&nbsp;*&nbsp;@date&nbsp;2018/1/22&nbsp;下午9:07</span></li><li class=""><span class="comment">&nbsp;*/</span></li><li class="alt"></li><li class=""></li><li class="alt"><span class="annotation">@RestController</span></li><li class=""><span class="annotation">@RequestMapping</span>(<span class="string">"/article"</span>)</li><li class="alt"><span class="keyword">public</span>&nbsp;<span class="keyword">class</span>&nbsp;ArticleController&nbsp;{</li><li class=""></li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;<span class="annotation">@Autowired</span></li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span>&nbsp;ArticleRepository&nbsp;ArticleRepository;</li><li class="alt"></li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;<span class="annotation">@RequestMapping</span>(<span class="string">""</span>)</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span>&nbsp;List&lt;Article&gt;&nbsp;list(<span class="annotation">@RequestParam</span>(value&nbsp;=&nbsp;<span class="string">"title"</span>,&nbsp;required&nbsp;=&nbsp;<span class="keyword">false</span>)&nbsp;String&nbsp;title,</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="annotation">@RequestParam</span>(value&nbsp;=&nbsp;<span class="string">"content"</span>,&nbsp;required&nbsp;=&nbsp;<span class="keyword">false</span>)&nbsp;String&nbsp;content,</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="annotation">@RequestParam</span>(value&nbsp;=&nbsp;<span class="string">"pageIndex"</span>,&nbsp;defaultValue&nbsp;=&nbsp;<span class="string">"0"</span>)&nbsp;<span class="keyword">int</span>&nbsp;pageIndex,</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="annotation">@RequestParam</span>(value&nbsp;=&nbsp;<span class="string">"pageSize"</span>,&nbsp;defaultValue&nbsp;=&nbsp;<span class="string">"10"</span>)&nbsp;<span class="keyword">int</span>&nbsp;pageSize)&nbsp;{</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pageable&nbsp;pageable&nbsp;=&nbsp;<span class="keyword">new</span>&nbsp;PageRequest(pageIndex,&nbsp;pageSize);</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Page&lt;Article&gt;&nbsp;page&nbsp;=&nbsp;ArticleRepository.findDistinctByTitleContainingOrContentContaining(title,&nbsp;content,&nbsp;pageable);</li><li class="alt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span>&nbsp;page.getContent();</li><li class="">&nbsp;&nbsp;&nbsp;&nbsp;}</li><li class="alt">}</li></ol></div><p>&nbsp;</p><p>因为之前在 测试类 里已经给 elasticsearch 添加了数据</p><p>所有现在可以在浏览器上访问：</p><p>http://localhost:8080/chuyun/article?title=浪淘沙&amp;content=伊人</p><p><img class="wp-image-7181 aligncenter" data-original="https://media.liuyanzhao.com/wp-content/uploads/2018/01/es11-1024x372.jpg" src="https://media.liuyanzhao.com/wp-content/uploads/2018/01/es11-1024x372.jpg" alt="SpringBoot 整合 elasticsearch 实例" width="646" height="235" srcset="https://media.liuyanzhao.com/wp-content/uploads/2018/01/es11-1024x372.jpg 1024w, https://media.liuyanzhao.com/wp-content/uploads/2018/01/es11-300x109.jpg 300w, https://media.liuyanzhao.com/wp-content/uploads/2018/01/es11-768x279.jpg 768w" sizes="(max-width: 646px) 100vw, 646px"></p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>本文地址：<a href="https://liuyanzhao.com/7170.html" target="_blank" rel="noopener noreferrer">https://liuyanzhao.com/7170.html</a></p></div>
+                    <div class="s-weixin">
+                        <ul class="weimg1">
+                            <li><strong>微信</strong></li>
+                            <li>赶快加我聊天吧</li>
+                            <li><img src="../img/weixin.jpg"></li>
+                        </ul>
+                        <ul class="weimg2">
+                            <li><strong>博客交流群</strong></li>
+                            <li>海纳百川，大家来水</li>
+                            <li><img src="../img/qqGroup.jpg" alt="weinxin"></li>
+                        </ul>
+                        <div class="clear"></div>
+                    </div>
+                    <div class="clear"></div>
+                    <div id="social">
+                        <div class="social-main">
+                            <span class="like">
+                                <a href="javascript:;" data-action="ding" data-id="1" title="点赞"
+                                   class="favorite" onclick="increaseLikeCount()">
+                                    <i class="fa fa-thumbs-up"></i>赞
+                                    <i class="count"
+                                       id="count-26">0</i>
+                                </a>
+                            </span>
+                            <div class="shang-p">
+                                <div class="shang-empty"><span></span></div>
+                                <span class="shang-s">
+                                    <a onclick="PaymentUtils.show();" style="cursor:pointer">赏</a>
+                                </span>
+                            </div>
+                            <div class="share-sd">
+                                        <span class="share-s" style="margin-top: 25px!important;">
+                                            <a href="javascript:void(0)" id="share-s" title="分享">
+                                                <i class="fa fa-share-alt"></i>分享
+                                            </a>
+                                        </span>
+                                <div id="share">
+                                    <ul class="bdsharebuttonbox bdshare-button-style1-16" data-bd-bind="1503997585792">
+                                        <li><a title="更多" class="bds_more fa fa-plus-square" data-cmd="more"
+                                               onclick="return false;" href="26.htm#"></a></li>
+                                        <li><a title="分享到QQ空间" class="fa fa-qq" data-cmd="qzone" onclick="return false;"
+                                               href="26.htm#"></a></li>
+                                        <li><a title="分享到新浪微博" class="fa fa-weibo" data-cmd="tsina"
+                                               onclick="return false;" href="26.htm#"></a></li>
+                                        <li><a title="分享到腾讯微博" class="fa fa-pinterest-square" data-cmd="tqq"
+                                               onclick="return false;" href="26.htm#"></a></li>
+                                        <li><a title="分享到人人网" class="fa fa-renren" data-cmd="renren"
+                                               onclick="return false;" href="26.htm#"></a></li>
+                                        <li><a title="分享到微信" class="fa fa-weixin" data-cmd="weixin"
+                                               onclick="return false;" href="26.htm#"></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+
+                    <footer class="single-footer">
+                        <ul class="single-meta">
+                            <li class="comment">
+                                <a href="26.htm#comments"
+                                   rel="external nofollow">
+                                    <i class="fa fa-comment-o"></i>
+                                    <i class="comment-count">0</i>
+                                </a>
+                            </li>
+                            <li class="views">
+                                <i class="fa fa-eye"></i> <span
+                                    class="articleViewCount">1</span>
+                                views
+                            </li>
+                            <li class="r-hide">
+                                <a href="javascript:pr()" title="侧边栏">
+                                    <i class="fa fa-caret-left"></i>
+                                    <i class="fa fa-caret-right"></i>
+                                </a>
+                            </li>
+                        </ul>
+                        <ul id="fontsize">
+                            <li>A+</li>
+                        </ul>
+                        <div class="single-cat-tag">
+                            <div class="single-cat">所属分类：
+                                <a href="../category/15.htm">
+                                            其他技术</a>
+                                <a href="../category/100000004.htm">
+                                            搜索引擎</a>
+                                </div>
+                        </div>
+                    </footer><!-- .entry-footer -->
+
+
+                    <div class="clear"></div>
+                </div><!-- .entry-content -->
+            </article><!-- #post -->
+
+                <div class="single-tag">
+                <ul class="" data-wow-delay="0.3s">
+                    <li>
+                            <a href="../tag/31.htm" rel="tag"
+                               style="background:#666666">
+                                    SpringBoot</a>
+                        </li>
+                    <li>
+                            <a href="../tag/32.htm" rel="tag"
+                               style="background:#666666">
+                                    ElasticSearch</a>
+                        </li>
+                    </ul>
+            </div>
+                <div class="authorbio wow fadeInUp">
+                <img alt="言曌" src="http://localhost:8081/uploads/2017/10/20171006225356181.jpg"
+                     class="avatar avatar-64 photo" height="64" width="64">
+                <ul class="postinfo">
+                    <li></li>
+                    <li><strong>版权声明：</strong>本站原创文章，于2018-11-25，由
+                        <strong>
+                                言曌</strong>
+                        发表。
+                    </li>
+                    <li class="reprinted"><strong>转载请注明：</strong>
+                        <a href="26.htm"
+                           rel="bookmark"
+                           title="本文固定链接 /article/26">
+                                SpringBoot 整合 elasticsearch 实例 | 风吟博客</a>
+                    </li>
+                </ul>
+                <div class="clear"></div>
+            </div>
+                <div id="single-widget">
+                <div class="wow fadeInUp" data-wow-delay="0.3s">
+                    <aside id="related_post-2" class="widget">
+                        <h3 class="widget-title">
+                            <span class="s-icon"></span>相关文章
+                        </h3>
+                        <div id="related_post_widget">
+                            <ul>
+                                <li>
+                                        <a href="26.htm">SpringBoot 整合 elasticsearch 实例</a>
+                                    </li>
+                                <li>
+                                        <a href="26.htm">SpringBoot 整合 elasticsearch 实例</a>
+                                    </li>
+                                <li>
+                                        <a href="32.htm">Docker_入门？只要这篇就够了！（纯干货适合0基础小白）</a>
+                                    </li>
+                                <li>
+                                        <a href="31.htm">RocketMQ 实战之快速入门</a>
+                                    </li>
+                                <li>
+                                        <a href="29.htm">IDEA启动EDAS项目</a>
+                                    </li>
+                                </ul>
+                        </div>
+                        <div class="clear"></div>
+                    </aside>
+                        <aside id="hot_post-8" class="widget hot_post">
+                        <h3 class="widget-title"><span class="s-icon"></span>猜你喜欢</h3>
+                        <div id="hot_post_widget">
+                            <ul>
+                                <li>
+                                        <a href="1.htm">
+                                                [转载]SpringMVC中使用Interceptor拦截器</a>
+                                    </li>
+                                <li>
+                                        <a href="2.htm">
+                                                springmvc 表单中文乱码解决方案</a>
+                                    </li>
+                                <li>
+                                        <a href="4.htm">
+                                                [转载]HTTP的幂等性</a>
+                                    </li>
+                                <li>
+                                        <a href="33.htm">
+                                                MySQL常用命令语句</a>
+                                    </li>
+                                <li>
+                                        <a href="11.htm">
+                                                Java如何让程序一直运行，不停止</a>
+                                    </li>
+                                </ul>
+                        </div>
+                        <div class="clear"></div>
+                    </aside>
+                        </div>
+                <div class="clear"></div>
+            </div>
+                <nav class="nav-single">
+                <a href="1.htm" rel="next">
+                            <span class="meta-nav">
+                                <span class="post-nav">上一篇
+                                 <i class="fa fa-angle-left"></i>
+                                </span>
+                                <br>[转载]SpringMVC中使用Interceptor拦截器</span>
+                        </a>
+                    <a href="27.htm" rel="next">
+                            <span class="meta-nav">
+                                <span class="post-nav">下一篇
+                                 <i class="fa fa-angle-right"></i>
+                                </span>
+                                <br>SpringCloud 中使用 Eureka 和 Feign 实现增删改查</span>
+                        </a>
+                    <div class="clear"></div>
+            </nav>
+                <div class="scroll-comments"></div>
+            <div id="comments" class="comments-area">
+                <div id="respond" class="comment-respond">
+                    <h3 id="reply-title" class="comment-reply-title"><span id="reply-title-word">发表评论</span>
+                        <a rel="nofollow" id="cancel-comment-reply-link"
+                           href="26.htm#respond"
+                           style="">取消回复</a>
+                    </h3>
+                    <form id="comment_form" method="post">
+                        <p class="comment-form-comment">
+                            <textarea id="comment" name="commentContent" rows="4" tabindex="1" required></textarea>
+                        </p>
+                        <div id="comment-author-info">
+                            <input type="hidden" name="commentPid" value="0">
+                            <input type="hidden" name="commentPname" value="">
+                            <input type="hidden" name="commentRole" value="0">
+                                <p class="comment-form-author">
+                                    <label for="author_name">
+                                        昵称<span class="required">*</span>
+                                    </label>
+                                    <input type="text" name="commentAuthorName" id="author_name" class="" value=""
+                                           tabindex="2" required>
+                                </p>
+                                <p class="comment-form-email">
+                                    <label for="author_email">
+                                        邮箱<span class="required">*</span>
+                                    </label>
+                                    <input type="email" name="commentAuthorEmail" id="author_email" class="" value=""
+                                           tabindex="3" required>
+                                </p>
+                                <p class="comment-form-url">
+                                    <label for="author_url">网址</label>
+                                    <input type="url" name="commentAuthorUrl" id="author_url" class="" value=""
+                                           tabindex="4">
+                                </p>
+                            </div>
+                        <div class="clear"></div>
+                        <p class="form-submit">
+                            <input id="submit" name="submit" type="submit" tabindex="5" value="提交评论">
+                            <input type="hidden" name="commentArticleId"
+                                   value="26" id="article_id">
+                            <input type="hidden" name="commentPid" id="comment_pid" value="0">
+                        </p>
+                    </form>
+                </div>
+
+                <ol class="comment-list">
+                    </ol>
+            </div>
+                </main>
+        <!-- .site-main -->
+    </div>
+    <div id="sidebar" class="widget-area all-sidebar"
+     style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
+
+        <aside class="widget widget_search">
+            <div class="searchbar">
+                <form method="get" id="searchform1" action="http://localhost:8081/search">
+                    <span> <input type="text" value="" name="keywords" id="s1" placeholder="输入搜索内容" required="">
+                        <button type="submit" id="searchsubmit1">搜索</button>
+                    </span>
+                </form>
+            </div>
+            <div class="clear"></div>
+        </aside>
+        <aside class="widget hot_comment" >
+            <h3 class="widget-title">
+                <i class="fa fa-bars"></i>热评文章
+            </h3>
+            <div id="hot_comment_widget">
+                <ul>
+                    <li>
+                            <a href="17.htm" rel="bookmark" title=" (5条评论)">
+                                    java中ImageIcon路径问题</a>
+                        </li>
+                    <li>
+                            <a href="14.htm" rel="bookmark" title=" (3条评论)">
+                                    execute、executeUpdate、executeQuery三者的区别</a>
+                        </li>
+                    <li>
+                            <a href="13.htm" rel="bookmark" title=" (3条评论)">
+                                    sql语句分为三类(DML,DDL,DCL)-介绍</a>
+                        </li>
+                    <li>
+                            <a href="8.htm" rel="bookmark" title=" (3条评论)">
+                                    Mybatis高级映射多对多查询</a>
+                        </li>
+                    <li>
+                            <a href="11.htm" rel="bookmark" title=" (2条评论)">
+                                    Java如何让程序一直运行，不停止</a>
+                        </li>
+                    <li>
+                            <a href="9.htm" rel="bookmark" title=" (2条评论)">
+                                    Servlet 实现验证码</a>
+                        </li>
+                    <li>
+                            <a href="6.htm" rel="bookmark" title=" (2条评论)">
+                                    Hibernate 简单的CURD操作</a>
+                        </li>
+                    <li>
+                            <a href="2.htm" rel="bookmark" title=" (2条评论)">
+                                    springmvc 表单中文乱码解决方案</a>
+                        </li>
+                    </ul>
+            </div>
+            <div class="clear"></div>
+        </aside>
+        <aside class="widget">
+            <h3 class="widget-title">
+                <i class="fa fa-bars"></i>所有标签
+            </h3>
+            <div class="tagcloud">
+                <a href="../index.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Java</a>
+                <a href="../tag/2.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            算法</a>
+                <a href="../tag/3.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            数据结构</a>
+                <a href="../tag/4.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            C</a>
+                <a href="../tag/5.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            操作系统</a>
+                <a href="../tag/6.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            计算机网络</a>
+                <a href="../tag/8.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            面试题</a>
+                <a href="../tag/9.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            数据库</a>
+                <a href="../tag/10.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            MySQL</a>
+                <a href="../tag/11.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Spring</a>
+                <a href="../tag/12.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            SpringMVC</a>
+                <a href="../tag/13.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            MyBatis</a>
+                <a href="../tag/14.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            JVM</a>
+                <a href="../tag/15.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            设计模式</a>
+                <a href="../tag/16.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            网络编程</a>
+                <a href="../tag/17.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            IO</a>
+                <a href="../tag/18.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            JSP</a>
+                <a href="../tag/19.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Servlet</a>
+                <a href="../tag/20.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            JavaWeb</a>
+                <a href="../tag/21.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Hibernate</a>
+                <a href="../tag/22.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            SQL</a>
+                <a href="../tag/24.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Redis</a>
+                <a href="../tag/25.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            SPA</a>
+                <a href="../tag/26.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            SpringCloud</a>
+                <a href="../tag/27.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Dubbo</a>
+                <a href="../tag/28.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            EDAS</a>
+                <a href="../tag/29.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            MongoDB</a>
+                <a href="../tag/31.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            SpringBoot</a>
+                <a href="../tag/32.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            ElasticSearch</a>
+                <a href="../tag/33.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Docker</a>
+                <a href="../tag/34.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Jenkins</a>
+                <a href="../tag/35.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Vue</a>
+                <a href="../tag/36.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            IDEA</a>
+                <a href="../tag/37.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Shiro</a>
+                <a href="../tag/38.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            RocketMQ</a>
+                <div class="clear"></div>
+            </div>
+            <div class="clear"></div>
+        </aside>
+        <aside id="random_post-7" class="widget random_post wow fadeInUp" data-wow-delay="0.3s">
+            <h3 class="widget-title">
+                <i class="fa fa-bars"></i>随机文章
+            </h3>
+            <div id="random_post_widget">
+                <ul>
+                    <li>
+                            <a href="6.htm" rel="bookmark">
+                                    Hibernate 简单的CURD操作</a>
+                        </li>
+                    <li>
+                            <a href="8.htm" rel="bookmark">
+                                    Mybatis高级映射多对多查询</a>
+                        </li>
+                    <li>
+                            <a href="33.htm" rel="bookmark">
+                                    MySQL常用命令语句</a>
+                        </li>
+                    <li>
+                            <a href="http://localhost:8081/article/26.htm" rel="bookmark">
+                                    SpringBoot 整合 elasticsearch 实例</a>
+                        </li>
+                    <li>
+                            <a href="http://localhost:8081/article/1.htm" rel="bookmark">
+                                    [转载]SpringMVC中使用Interceptor拦截器</a>
+                        </li>
+                    <li>
+                            <a href="http://localhost:8081/article/15.htm" rel="bookmark">
+                                    JSP 中 forward 转发 和 sendRedirect 重定向的区别</a>
+                        </li>
+                    <li>
+                            <a href="http://localhost:8081/article/16.htm" rel="bookmark">
+                                    Java中File类的使用</a>
+                        </li>
+                    <li>
+                            <a href="http://localhost:8081/article/10.htm" rel="bookmark">
+                                    Integer与int的种种比较你知道多少？</a>
+                        </li>
+                    </ul>
+            </div>
+            <div class="clear"></div>
+        </aside>
+        </div>
+</div>
+    <div class="clear"></div>
+    <footer id="colophon" class="site-footer" role="contentinfo">
+    <div class="site-info">
+        <p style="text-align: center;">Copyright © 2017
+            <a href="http://localhost:8081/default.html" target="_blank" rel="noopener noreferrer">风吟博客</a>
+            All rights reserved.
+            <a target="_blank" href="http://localhost:8081/map.htm" >
+                <span class="font-text">站点地图</span>
+            </a>
+        </p>
+    </div>
+    <!-- .site-info -->
+</footer><!-- .site-footer -->
+</div>
+
+<script src="../js/jquery.min.js"></script>
+<script src="../js/superfish.js"></script>
+<script src='../js/sticky.js'></script>
+<script src="../js/script.js"></script>
+<script src="../plugin/layui/layui.all.js"></script>
+
+
+<script src="../js/jquery.cookie.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            if ($('#author_name').val() == '') {
+                var author = localStorage.getItem("author");
+                $("#author_name").val(author == 'undefined' ? '' : author);
+            }
+            if ($('#author_email').val() == '') {
+                var email = localStorage.getItem("email");
+                $("#author_email").val(email == 'undefined' ? '' : email);
+            }
+            if ($('#author_url').val() == '') {
+                var url = localStorage.getItem("url");
+                $("#author_url").val(url == 'undefined' ? '' : url);
+            }
+        });
+
+        var articleId = $("#articleDetail").attr("data-id");
+        increaseViewCount(articleId);
+        layui.code({
+            elem: 'pre',//默认值为.layui-code
+            // skin: 'notepad', //如果要默认风格，不用设定该key。
+            about: false
+        });
+
+    </script>
+
+</body>
+</html>

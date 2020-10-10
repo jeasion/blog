@@ -1,0 +1,27 @@
+package ${package.ServiceImpl};
+
+
+import org.springframework.stereotype.Service;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
+import ${package.Entity}.${table.entityName};
+import ${package.Mapper}.${table.mapperName};
+
+
+/**
+ * <p>
+ * $!{tablecomment} 服务类
+ * </p>
+ *
+ * @author ${author}
+ * @date ${date}
+ */
+@Service
+@Log4j2
+public class ${table.ServiceImplName} {
+
+    @Autowired
+    private ${table.mapperName} ${table.entityPath}Dao;
+
+
+}

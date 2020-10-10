@@ -1,0 +1,70 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeasion.blog.dao.ArticleDao">
+
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        <!-- -->
+        delete from article
+        where
+    </delete>
+
+    <insert id="insert" parameterType="com.jeasion.blog.pojo.Article">
+        <!-- -->
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into article (
+                ARTICLE_ID,                USER_ID,                TYPE,                TAG,                ARTICLE,                CREATED_TIME,                UPDATED_BY,                UPDATED_TIME,                ARTICLE_CONTENT        )
+        values (
+                #{ articleId},                #{ userId},                #{ type},                #{ tag},                #{ article},                #{ createdTime},                #{ updatedBy},                #{ updatedTime},                #{ articleContent}        )
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.jeasion.blog.pojo.Article">
+        <!-- -->
+        update article
+        set
+                ARTICLE_ID = #{ articleId} ,                USER_ID = #{ userId} ,                TYPE = #{ type} ,                TAG = #{ tag} ,                ARTICLE = #{ article} ,                CREATED_TIME = #{ createdTime} ,                UPDATED_BY = #{ updatedBy} ,                UPDATED_TIME = #{ updatedTime} ,                ARTICLE_CONTENT = #{ articleContent}         where
+    </update>
+
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        <!-- -->
+        select
+        <include refid="Base_Column_List" />
+        from article
+        where id = #{ id }
+    </select>
+
+    <select id="countForPage" parameterType="map" resultType="Long">
+        <!-- -->
+        select
+        count(*)
+        from
+        article
+        where 1=1
+        <if test="beginDate != null and beginDate != ''">
+            and create_date <![CDATA[>=]]>  #{beginDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            and  create_date <![CDATA[<=]]> #{endDate}
+        </if>
+    </select>
+
+    <select id="listForPage" parameterType="map" 	resultType="com.lzn.mybatisplus.codegenerator.export.ArticleVO">
+        <!-- -->
+        select
+        <include refid="Base_Column_List" />
+        from
+        article
+        where 1=1
+        <if test="beginDate != null and beginDate != ''">
+            and create_date <![CDATA[>=]]>  #{beginDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            and  create_date <![CDATA[<=]]> #{endDate}
+        </if>
+        limit #{start}, #{limit}
+    </select>
+</mapper>

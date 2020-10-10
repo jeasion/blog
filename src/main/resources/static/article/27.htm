@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Cache-Control" content="max-age=72000"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="applicable-device" content="pc,mobile">
+    <meta name="MobileOptimized" content="width"/>
+    <meta name="HandheldFriendly" content="true"/>
+    <link rel="shortcut icon" href="../img/logo.png">
+    <meta name="description" content="风吟博客,一个简洁的Java博客,言曌程序学习的一个新起点。"/>
+    <meta name="keywords" content="风吟,风吟博客,Java博客,SSM博客,言曌,言曌博客"/>
+    <title>SpringCloud 中使用 Eureka 和 Feign 实现增删改查</title>
+<link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../plugin/font-awesome/font-awesome/css/font-awesome.css">
+
+    <link rel="stylesheet" href="../css/highlight.css">
+        <style>
+            .entry-title {
+                background: #f8f8f8;
+            }
+        </style>
+    </head>
+<body>
+<div id="page" class="site" style="transform: none;">
+
+    <header id="masthead" class="site-header">
+    <nav id="top-header">
+        <div class="top-nav">
+            <div class="user-login">
+                <a href="http://localhost:8081/admin">登录</a>
+                    <a href="https://liuyanzhao.com/bulletin/my-service" target="_blank" style="color:red;">毕设代做/有偿服务</a>
+            </div>
+            <div class="menu-topmenu-container">
+                <ul id="menu-topmenu" class="top-menu">
+                    <li class="menu-item">
+                        </li>
+                    <li class="menu-item">
+                        <a href="../applyLink.htm" >
+                                    <i class="fa fa-link"></i>
+                                    <span class="font-text">申请友链&nbsp;</span>&nbsp;
+                                </a>
+                            </li>
+                    <li class="menu-item">
+                        <a href="../articleFile.htm" >
+                                    <i class="fa-list-alt fa"></i>
+                                    <span class="font-text">文章归档&nbsp;</span>&nbsp;
+                                </a>
+                            </li>
+                    <li class="menu-item">
+                        </li>
+                    <li class="menu-item">
+                        <a href="../aboutSite.htm" >
+                                    <i class="fa fa-info"></i>
+                                    <span class="font-text">关于本站&nbsp;</span>&nbsp;
+                                </a>
+                            </li>
+                    </ul>
+            </div>
+        </div>
+    </nav><!-- #top-header -->
+    <div id="menu-box">
+        <div id="top-menu">
+                <span class="nav-search">
+                    <i class="fa fa-search"></i>
+                </span>
+            <div class="logo-site"><h1 class="site-title">
+                <a href="../default.html" title="风吟博客">风吟博客</a>
+            </h1>
+                <p class="site-description">莫问收获，但问耕耘。</p>
+            </div><!-- .logo-site -->
+            <div id="site-nav-wrap">
+                <div id="sidr-close">
+                    <a href="27.htm#sidr-close" class="toggle-sidr-close">×</a>
+                </div>
+                <nav id="site-nav" class="main-nav">
+                    <a href="27.htm#sidr-main" id="navigation-toggle" class="bars">
+                        <i class="fa fa-bars"></i>
+                    </a>
+                    <div class="menu-pcmenu-container">
+                        <ul id="menu-pcmenu" class="down-menu nav-menu sf-js-enabled sf-arrows">
+
+                            <li>
+                                <a href="../default.html">
+                                    <i class="fa-home fa"></i>
+                                    <span class="font-text">首页</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                        <a href="../category/1.htm">
+                                            <i class="fa fa-coffee"></i>
+                                            <span class="font-text">Java&nbsp;</span>
+                                        </a>
+                                        <ul class="sub-menu">
+                                            <li>
+                                                        <a href="../category/2.htm" target="_blank">Java基础</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/3.htm" target="_blank">Core Java</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/4.htm" target="_blank">多线程并发编程</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/5.htm" target="_blank">Sockets和IO</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/6.htm" target="_blank">设计模式和反射</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/7.htm" target="_blank">JVM</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/8.htm" target="_blank">JavaWeb</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/9.htm" target="_blank">Java框架</a>
+                                                    </li>
+                                                </ul>
+                                    </li>
+                                <li>
+                                        <a href="../category/10.htm">
+                                            <i class="fa fa-cubes"></i>
+                                            <span class="font-text">计算机科学&nbsp;</span>
+                                        </a>
+                                        <ul class="sub-menu">
+                                            <li>
+                                                        <a href="../category/11.htm" target="_blank">数据结构和算法</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/12.htm" target="_blank">操作系统</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/13.htm" target="_blank">数据库</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/14.htm" target="_blank">计算机网络</a>
+                                                    </li>
+                                                </ul>
+                                    </li>
+                                <li>
+                                        <a href="../category/15.htm">
+                                            <i class="fa-snowflake-o fa"></i>
+                                            <span class="font-text">其他技术&nbsp;</span>
+                                        </a>
+                                        <ul class="sub-menu">
+                                            <li>
+                                                        <a href="../category/16.htm" target="_blank">消息服务</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/17.htm" target="_blank">缓存服务</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/100000003.htm" target="_blank">微服务</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/100000004.htm" target="_blank">搜索引擎</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/100000005.htm" target="_blank">权限框架</a>
+                                                    </li>
+                                                <li>
+                                                        <a href="../category/100000006.htm" target="_blank">开发利器</a>
+                                                    </li>
+                                                </ul>
+                                    </li>
+                                <li>
+                                        <a href="https://leetcode.com/problemset/all">
+                                            <i class="ssss"></i>
+                                            <span class="font-text">LeetCode&nbsp;</span>
+                                        </a>
+                                    </li>
+                                <li>
+                                        <a href="../message.htm">
+                                            <i class="fa fa-comment"></i>
+                                            <span class="font-text">留言板&nbsp;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                    </div>
+                </nav>
+            </div>
+            <div class="clear"></div>
+        </div><!-- #top-menu -->
+    </div><!-- #menu-box -->
+    </header><!-- #masthead -->
+<div id="search-main">
+    <div class="searchbar">
+        <form method="get" id="searchform" action="http://localhost:8081/search" accept-charset="UTF-8">
+            <span>
+                <input type="text" value="" name="keywords" id="s" placeholder="输入搜索内容"required="">
+                <button type="submit" id="searchsubmit">搜索</button>
+            </span>
+        </form>
+    </div>
+    <div class="clear"></div>
+</div>
+<nav class="breadcrumb">
+        <a class="crumbs" href="../default.html">
+            <i class="fa fa-home"></i>首页
+        </a>
+        <i class="fa fa-angle-right"></i>
+                <a>未分类</a>
+            <i class="fa fa-angle-right"></i>
+        正文
+    </nav>
+    <div id="content" class="site-content" style="transform: none;">
+        <div id="primary" class="content-area">
+        <main id="main" class="site-main" role="main">
+            <article class="post" id="articleDetail" data-id="27">
+                <header class="entry-header">
+                    <h1 class="entry-title">
+                            SpringCloud 中使用 Eureka 和 Feign 实现增删改查</h1>
+                </header><!-- .entry-header -->
+                <div class="entry-content">
+                    <div class="single-content">
+                            <p>在没有接触微服务或者分布式项目之前，我们的项目时没有分层的，我们的服务也是没有分层的。</p><p>比如，我们有5台服务器使用 Nginx 做负载均衡，上面都是安装了我们的 Tomcat 服务器，部署的一样的项目。当用户访问某个请求的时候，按照负载均衡的机制(随机、轮询之类)来转发到对应的服务器上，然后在该服务器上先是到 Controller，然后 Service，再到 DAO，然后返回给 Service，返回给 Controller，最后返回给前台。似乎这样也行。</p><p>但是当我们网站访问量不断飙升的时候，似乎有点撑不住了，只能加服务器，成本也明显增加。我们能不能再分一分呢 ？</p><p>同时，我们发现真正比较耗费时间的是一些 IO 操作，比如数据库操作、上传文件之类的。为了方便开发，我们可以把 DAO 和 Service 层放在一起，暂且称为业务层。业务层耗费的远远大于 Controller 层的。我们可以在 5 台服务器中拿 1 台部署 Controller 层，另外 4 台部署业务层代码。</p><p>如果将他们连接起来呢？</p><p>Eureka + Feign！</p><p>Eureka 做注册中心，业务层和控制器层每一个实例可以作为一个服务，比如 UserService 是一个服务,UserController 也可以是一个服务，一个服务可以有多个状态(可以有多台机器注册到该服务)。</p><p>下面通过一个例子来讲解</p><p>&nbsp;</p><p>源码地址：<a href="https://liuyanzhao.com/wp-content/themes/begin/inc/go.php?url=https://github.com/saysky/spring-cloud-demo">https://github.com/saysky/spring-cloud-demo</a></p><p>&nbsp;</p><h2>一、下载源码</h2><p>请上 Github 上下载本例子源码</p><p>源码地址：<a href="https://liuyanzhao.com/wp-content/themes/begin/inc/go.php?url=https://github.com/saysky/spring-cloud-demo" target="_blank" rel="noopener noreferrer">https://github.com/saysky/spring-cloud-demo</a></p><p>&nbsp;</p><h2>二、项目结构</h2><p>注意这是三个项目(不是一个项目)，用 IDEA 打开分别打开三个项目，最终如图</p><p><a href="https://media.liuyanzhao.com/wp-content/uploads/2018/07/springcloud40.png" class="fancybox" data-fancybox-group="button"><img class="wp-image-8631 aligncenter" data-original="https://media.liuyanzhao.com/wp-content/uploads/2018/07/springcloud40-1024x385.png" src="https://media.liuyanzhao.com/wp-content/uploads/2018/07/springcloud40-1024x385.png" alt="SpringCloud 中使用 Eureka 和 Feign 实现增删改查" width="595" height="224" srcset="https://media.liuyanzhao.com/wp-content/uploads/2018/07/springcloud40-1024x385.png 1024w, https://media.liuyanzhao.com/wp-content/uploads/2018/07/springcloud40-300x113.png 300w, https://media.liuyanzhao.com/wp-content/uploads/2018/07/springcloud40-768x289.png 768w, https://media.liuyanzhao.com/wp-content/uploads/2018/07/springcloud40-530x200.png 530w, https://media.liuyanzhao.com/wp-content/uploads/2018/07/springcloud40.png 1334w" sizes="(max-width: 595px) 100vw, 595px"></a></p><p>&nbsp;</p><p>1、eureka-server（一个 SpringBoot 项目）</p><p><a href="https://media.liuyanzhao.com/wp-content/uploads/2018/07/eureka-server.png" class="fancybox" data-fancybox-group="button"><img class="wp-image-8633 aligncenter" data-original="https://media.liuyanzhao.com/wp-content/uploads/2018/07/eureka-server.png" src="https://media.liuyanzhao.com/wp-content/uploads/2018/07/eureka-server.png" alt="SpringCloud 中使用 Eureka 和 Feign 实现增删改查" width="420" height="262" srcset="https://media.liuyanzhao.com/wp-content/uploads/2018/07/eureka-server.png 772w, https://media.liuyanzhao.com/wp-content/uploads/2018/07/eureka-server-300x187.png 300w, https://media.liuyanzhao.com/wp-content/uploads/2018/07/eureka-server-768x480.png 768w" sizes="(max-width: 420px) 100vw, 420px"></a></p><p>&nbsp;</p><p>&nbsp;</p><p>2、cloud (一个多模块项目，API + 业务层)&nbsp; &nbsp;<a href="https://media.liuyanzhao.com/wp-content/uploads/2018/07/cloud2.png" class="fancybox" data-fancybox-group="button"><img class="wp-image-8632 aligncenter" data-original="https://media.liuyanzhao.com/wp-content/uploads/2018/07/cloud2.png" src="https://media.liuyanzhao.com/wp-content/uploads/2018/07/cloud2.png" alt="SpringCloud 中使用 Eureka 和 Feign 实现增删改查" width="418" height="121" srcset="https://media.liuyanzhao.com/wp-content/uploads/2018/07/cloud2.png 574w, https://media.liuyanzhao.com/wp-content/uploads/2018/07/cloud2-300x87.png 300w" sizes="(max-width: 418px) 100vw, 418px"></a></p><p>&nbsp;</p><p>&nbsp;</p><p>（1）其中 cloud-api 是 api，里面有 model 和 service接口，cloud-core 和 cloud-web 将依赖它</p><p>到时候需要首先将该模块 install，即打包到本地仓库中</p><p><a href="https://media.liuyanzhao.com/wp-content/uploads/2018/07/api.png" class="fancybox" data-fancybox-group="button"><img class="wp-image-8634 aligncenter" data-original="https://media.liuyanzhao.com/wp-content/uploads/2018/07/api.png" src="https://media.liuyanzhao.com/wp-content/uploads/2018/07/api.png" alt="SpringCloud 中使用 Eureka 和 Feign 实现增删改查" width="463" height="414" srcset="https://media.liuyanzhao.com/wp-content/uploads/2018/07/api.png 672w, https://media.liuyanzhao.com/wp-content/uploads/2018/07/api-300x269.png 300w" sizes="(max-width: 463px) 100vw, 463px"></a></p><p>&nbsp;</p><p>（2）其中 cloud-core，里面 dao 和 serviceImpl，作为生产者的存在</p><p>启动类在这里面</p><p><a href="https://media.liuyanzhao.com/wp-content/uploads/2018/07/core.png" class="fancybox" data-fancybox-group="button"><img class="wp-image-8635 aligncenter" data-original="https://media.liuyanzhao.com/wp-content/uploads/2018/07/core.png" src="https://media.liuyanzhao.com/wp-content/uploads/2018/07/core.png" alt="SpringCloud 中使用 Eureka 和 Feign 实现增删改查" width="439" height="460" srcset="https://media.liuyanzhao.com/wp-content/uploads/2018/07/core.png 800w, https://media.liuyanzhao.com/wp-content/uploads/2018/07/core-286x300.png 286w, https://media.liuyanzhao.com/wp-content/uploads/2018/07/core-768x804.png 768w" sizes="(max-width: 439px) 100vw, 439px"></a></p><p>&nbsp;</p><p>3、cloud-web( 一个 SpringBoot 项目)</p><p>只有控制器层，需要依赖 cloud-api ，作为消费者的存在(可以是其他人调用)</p><p><a href="https://media.liuyanzhao.com/wp-content/uploads/2018/07/cloud-web.png" class="fancybox" data-fancybox-group="button"><img class="wp-image-8636 aligncenter" data-original="https://media.liuyanzhao.com/wp-content/uploads/2018/07/cloud-web.png" src="https://media.liuyanzhao.com/wp-content/uploads/2018/07/cloud-web.png" alt="SpringCloud 中使用 Eureka 和 Feign 实现增删改查" width="439" height="359" srcset="https://media.liuyanzhao.com/wp-content/uploads/2018/07/cloud-web.png 746w, https://media.liuyanzhao.com/wp-content/uploads/2018/07/cloud-web-300x245.png 300w" sizes="(max-width: 439px) 100vw, 439px"></a></p><p>&nbsp;</p><h2>三、如何启动</h2><p>1、新建数据库 summer，导入 user.sql</p><p>2、导入新项目，先后顺序随便(如eureka-server、cloud、cloud-web)</p><p>3、启动 eureka-server 项目，端口为 8761</p><p>4、对 cloud 项目中的 cloud-api 模块进行install，maven命令是 mvn clean install</p><p>5、启动 cloud-core 项目，端口为 8090</p><p>6、（可选）其实这时候我们可以在地址栏访问一下 localhost:8090/user 其实是可以访问的，如果你不行，说明有问题</p><p>7、启动 cloud-web 项目，端口为 8080</p><p>8、在地址栏访问 localhost:8080/user，如果可以看到数据，说明成功</p><p>&nbsp;</p><h2>四、补充</h2><p>1、我这里模拟了四台注册了业务层服务(cloud-producer) 和 一台控制器层服务(cloud-consumer)</p><p><a href="https://media.liuyanzhao.com/wp-content/uploads/2018/07/server.png" class="fancybox" data-fancybox-group="button"><img class="wp-image-8637 aligncenter" data-original="https://media.liuyanzhao.com/wp-content/uploads/2018/07/server-1024x655.png" src="https://media.liuyanzhao.com/wp-content/uploads/2018/07/server-1024x655.png" alt="SpringCloud 中使用 Eureka 和 Feign 实现增删改查" width="644" height="412" srcset="https://media.liuyanzhao.com/wp-content/uploads/2018/07/server-1024x655.png 1024w, https://media.liuyanzhao.com/wp-content/uploads/2018/07/server-300x192.png 300w, https://media.liuyanzhao.com/wp-content/uploads/2018/07/server-768x491.png 768w" sizes="(max-width: 644px) 100vw, 644px"></a></p><p>ps：因为我是用本机测试，所以开了不同的端口表示不同的服务器</p><p>&nbsp;</p><p>2、访问控制器层，然后 Feign 会帮我们在注册中心中找到对应的服务名和对应的方法</p><p>我们访问 localhost:8080/user/1 首先到的是控制器层，控制器层调用 userService，userService 是 Cloud-API 里的，添加了 @FeignClient(name="cloud-producer") 注解，然后找到在注册中心中寻找 cloud-producer 的服务，从一台(负载均衡)服务器中找到 userService 的实现类，即 userServiceImpl，也就是进入了 cloud-core，然后完成一系列 DAO 和 Service 操作，最后返回给 Controller。</p><p><a href="https://media.liuyanzhao.com/wp-content/uploads/2018/07/8080.png" class="fancybox" data-fancybox-group="button"><img class="wp-image-8638 aligncenter" data-original="https://media.liuyanzhao.com/wp-content/uploads/2018/07/8080-1024x680.png" src="https://media.liuyanzhao.com/wp-content/uploads/2018/07/8080-1024x680.png" alt="SpringCloud 中使用 Eureka 和 Feign 实现增删改查" width="625" height="415" srcset="https://media.liuyanzhao.com/wp-content/uploads/2018/07/8080-1024x680.png 1024w, https://media.liuyanzhao.com/wp-content/uploads/2018/07/8080-300x199.png 300w, https://media.liuyanzhao.com/wp-content/uploads/2018/07/8080-768x510.png 768w, https://media.liuyanzhao.com/wp-content/uploads/2018/07/8080.png 1148w" sizes="(max-width: 625px) 100vw, 625px"></a></p><p>其中 Service 和 Service 的实现都需要加 RequestMapping，Service 实现需要加 @RestController，否则会出现 404</p><p><a href="https://media.liuyanzhao.com/wp-content/uploads/2018/07/cloud-api.png" class="fancybox" data-fancybox-group="button"><img class="wp-image-8639 aligncenter" data-original="https://media.liuyanzhao.com/wp-content/uploads/2018/07/cloud-api-1024x373.png" src="https://media.liuyanzhao.com/wp-content/uploads/2018/07/cloud-api-1024x373.png" alt="SpringCloud 中使用 Eureka 和 Feign 实现增删改查" width="627" height="228" srcset="https://media.liuyanzhao.com/wp-content/uploads/2018/07/cloud-api-1024x373.png 1024w, https://media.liuyanzhao.com/wp-content/uploads/2018/07/cloud-api-300x109.png 300w, https://media.liuyanzhao.com/wp-content/uploads/2018/07/cloud-api-768x280.png 768w, https://media.liuyanzhao.com/wp-content/uploads/2018/07/cloud-api.png 1538w" sizes="(max-width: 627px) 100vw, 627px"></a></p><p>所以，其实我们可以直接访问 cloud-core 这一层，在地址栏访问 localhost:8090/user/1</p><p><a href="https://media.liuyanzhao.com/wp-content/uploads/2018/07/cloud-api2.png" class="fancybox" data-fancybox-group="button"><img class="wp-image-8640 aligncenter" data-original="https://media.liuyanzhao.com/wp-content/uploads/2018/07/cloud-api2.png" src="https://media.liuyanzhao.com/wp-content/uploads/2018/07/cloud-api2.png" alt="SpringCloud 中使用 Eureka 和 Feign 实现增删改查" width="497" height="383" srcset="https://media.liuyanzhao.com/wp-content/uploads/2018/07/cloud-api2.png 784w, https://media.liuyanzhao.com/wp-content/uploads/2018/07/cloud-api2-300x231.png 300w, https://media.liuyanzhao.com/wp-content/uploads/2018/07/cloud-api2-768x592.png 768w" sizes="(max-width: 497px) 100vw, 497px"></a></p><p>&nbsp;</p><p>事实上，我们访问 控制器的时候，当需要某个 Service 的时候，Feign 帮我们向 Service 又发了一个同样的请求。我们可以直接访问这个 Service 请求</p><p>但是，通常我们会在生产环境中，不让别人直接访问到 Service，可以通过一些机制实现，比如内网啦。</p><p>&nbsp;</p><h2>六、学习过程中遇到的问题</h2><p>1、cloud-web 中注入 userService，一直注入失败，无法扫描到 userServiceImpl</p><p>解决方案：在 cloud-web 启动类上添加</p><p>@EnableFeignClients(basePackages = "com.liuyanzhao.cloud")</p><p><a href="https://media.liuyanzhao.com/wp-content/uploads/2018/07/cloud22.png" class="fancybox" data-fancybox-group="button"><img class="wp-image-8641 aligncenter" data-original="https://media.liuyanzhao.com/wp-content/uploads/2018/07/cloud22-1024x288.png" src="https://media.liuyanzhao.com/wp-content/uploads/2018/07/cloud22-1024x288.png" alt="SpringCloud 中使用 Eureka 和 Feign 实现增删改查" width="566" height="159" srcset="https://media.liuyanzhao.com/wp-content/uploads/2018/07/cloud22-1024x288.png 1024w, https://media.liuyanzhao.com/wp-content/uploads/2018/07/cloud22-300x84.png 300w, https://media.liuyanzhao.com/wp-content/uploads/2018/07/cloud22-768x216.png 768w, https://media.liuyanzhao.com/wp-content/uploads/2018/07/cloud22.png 1572w" sizes="(max-width: 566px) 100vw, 566px"></a></p><p>&nbsp;</p><p>2、出现 404 错误</p><p>cloud-core 里的 userServiceImpl 也需要加 @RequestMapping，并且需要将 @Service 改成 @RestController</p><p>&nbsp;</p><p>UserService（cloud-api）</p><p><a href="https://media.liuyanzhao.com/wp-content/uploads/2018/07/user23.png" class="fancybox" data-fancybox-group="button"><img class="wp-image-8643 aligncenter" data-original="https://media.liuyanzhao.com/wp-content/uploads/2018/07/user23-1024x605.png" src="https://media.liuyanzhao.com/wp-content/uploads/2018/07/user23-1024x605.png" alt="SpringCloud 中使用 Eureka 和 Feign 实现增删改查" width="615" height="363" srcset="https://media.liuyanzhao.com/wp-content/uploads/2018/07/user23-1024x605.png 1024w, https://media.liuyanzhao.com/wp-content/uploads/2018/07/user23-300x177.png 300w, https://media.liuyanzhao.com/wp-content/uploads/2018/07/user23-768x454.png 768w, https://media.liuyanzhao.com/wp-content/uploads/2018/07/user23.png 1334w" sizes="(max-width: 615px) 100vw, 615px"></a></p><p>&nbsp;</p><p>UserServiceImpl（cloud-core）</p><p><a href="https://media.liuyanzhao.com/wp-content/uploads/2018/07/user22.png" class="fancybox" data-fancybox-group="button"><img class="wp-image-8642 aligncenter" data-original="https://media.liuyanzhao.com/wp-content/uploads/2018/07/user22-1024x457.png" src="https://media.liuyanzhao.com/wp-content/uploads/2018/07/user22-1024x457.png" alt="SpringCloud 中使用 Eureka 和 Feign 实现增删改查" width="623" height="278" srcset="https://media.liuyanzhao.com/wp-content/uploads/2018/07/user22-1024x457.png 1024w, https://media.liuyanzhao.com/wp-content/uploads/2018/07/user22-300x134.png 300w, https://media.liuyanzhao.com/wp-content/uploads/2018/07/user22-768x343.png 768w" sizes="(max-width: 623px) 100vw, 623px"></a></p><p>&nbsp;</p></div>
+                    <div class="s-weixin">
+                        <ul class="weimg1">
+                            <li><strong>微信</strong></li>
+                            <li>赶快加我聊天吧</li>
+                            <li><img src="../img/weixin.jpg"></li>
+                        </ul>
+                        <ul class="weimg2">
+                            <li><strong>博客交流群</strong></li>
+                            <li>海纳百川，大家来水</li>
+                            <li><img src="../img/qqGroup.jpg" alt="weinxin"></li>
+                        </ul>
+                        <div class="clear"></div>
+                    </div>
+                    <div class="clear"></div>
+                    <div id="social">
+                        <div class="social-main">
+                            <span class="like">
+                                <a href="javascript:;" data-action="ding" data-id="1" title="点赞"
+                                   class="favorite" onclick="increaseLikeCount()">
+                                    <i class="fa fa-thumbs-up"></i>赞
+                                    <i class="count"
+                                       id="count-27">0</i>
+                                </a>
+                            </span>
+                            <div class="shang-p">
+                                <div class="shang-empty"><span></span></div>
+                                <span class="shang-s">
+                                    <a onclick="PaymentUtils.show();" style="cursor:pointer">赏</a>
+                                </span>
+                            </div>
+                            <div class="share-sd">
+                                        <span class="share-s" style="margin-top: 25px!important;">
+                                            <a href="javascript:void(0)" id="share-s" title="分享">
+                                                <i class="fa fa-share-alt"></i>分享
+                                            </a>
+                                        </span>
+                                <div id="share">
+                                    <ul class="bdsharebuttonbox bdshare-button-style1-16" data-bd-bind="1503997585792">
+                                        <li><a title="更多" class="bds_more fa fa-plus-square" data-cmd="more"
+                                               onclick="return false;" href="27.htm#"></a></li>
+                                        <li><a title="分享到QQ空间" class="fa fa-qq" data-cmd="qzone" onclick="return false;"
+                                               href="27.htm#"></a></li>
+                                        <li><a title="分享到新浪微博" class="fa fa-weibo" data-cmd="tsina"
+                                               onclick="return false;" href="27.htm#"></a></li>
+                                        <li><a title="分享到腾讯微博" class="fa fa-pinterest-square" data-cmd="tqq"
+                                               onclick="return false;" href="27.htm#"></a></li>
+                                        <li><a title="分享到人人网" class="fa fa-renren" data-cmd="renren"
+                                               onclick="return false;" href="27.htm#"></a></li>
+                                        <li><a title="分享到微信" class="fa fa-weixin" data-cmd="weixin"
+                                               onclick="return false;" href="27.htm#"></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+
+                    <footer class="single-footer">
+                        <ul class="single-meta">
+                            <li class="comment">
+                                <a href="27.htm#comments"
+                                   rel="external nofollow">
+                                    <i class="fa fa-comment-o"></i>
+                                    <i class="comment-count">0</i>
+                                </a>
+                            </li>
+                            <li class="views">
+                                <i class="fa fa-eye"></i> <span
+                                    class="articleViewCount">0</span>
+                                views
+                            </li>
+                            <li class="r-hide">
+                                <a href="javascript:pr()" title="侧边栏">
+                                    <i class="fa fa-caret-left"></i>
+                                    <i class="fa fa-caret-right"></i>
+                                </a>
+                            </li>
+                        </ul>
+                        <ul id="fontsize">
+                            <li>A+</li>
+                        </ul>
+                        <div class="single-cat-tag">
+                            <div class="single-cat">所属分类：
+                                </div>
+                        </div>
+                    </footer><!-- .entry-footer -->
+
+
+                    <div class="clear"></div>
+                </div><!-- .entry-content -->
+            </article><!-- #post -->
+
+                <div class="single-tag">
+                <ul class="" data-wow-delay="0.3s">
+                    </ul>
+            </div>
+                <div class="authorbio wow fadeInUp">
+                <img alt="言曌" src="http://localhost:8081/uploads/2017/10/20171006225356181.jpg"
+                     class="avatar avatar-64 photo" height="64" width="64">
+                <ul class="postinfo">
+                    <li></li>
+                    <li><strong>版权声明：</strong>本站原创文章，于2018-11-25，由
+                        <strong>
+                                言曌</strong>
+                        发表。
+                    </li>
+                    <li class="reprinted"><strong>转载请注明：</strong>
+                        <a href="27.htm"
+                           rel="bookmark"
+                           title="本文固定链接 /article/27">
+                                SpringCloud 中使用 Eureka 和 Feign 实现增删改查 | 风吟博客</a>
+                    </li>
+                </ul>
+                <div class="clear"></div>
+            </div>
+                <div id="single-widget">
+                <div class="wow fadeInUp" data-wow-delay="0.3s">
+                    <aside id="related_post-2" class="widget">
+                        <h3 class="widget-title">
+                            <span class="s-icon"></span>相关文章
+                        </h3>
+                        <div id="related_post_widget">
+                            <ul>
+                                </ul>
+                        </div>
+                        <div class="clear"></div>
+                    </aside>
+                        <aside id="hot_post-8" class="widget hot_post">
+                        <h3 class="widget-title"><span class="s-icon"></span>猜你喜欢</h3>
+                        <div id="hot_post_widget">
+                            <ul>
+                                <li>
+                                        <a href="1.htm">
+                                                [转载]SpringMVC中使用Interceptor拦截器</a>
+                                    </li>
+                                <li>
+                                        <a href="2.htm">
+                                                springmvc 表单中文乱码解决方案</a>
+                                    </li>
+                                <li>
+                                        <a href="4.htm">
+                                                [转载]HTTP的幂等性</a>
+                                    </li>
+                                <li>
+                                        <a href="33.htm">
+                                                MySQL常用命令语句</a>
+                                    </li>
+                                <li>
+                                        <a href="11.htm">
+                                                Java如何让程序一直运行，不停止</a>
+                                    </li>
+                                </ul>
+                        </div>
+                        <div class="clear"></div>
+                    </aside>
+                        </div>
+                <div class="clear"></div>
+            </div>
+                <nav class="nav-single">
+                <a href="1.htm" rel="next">
+                            <span class="meta-nav">
+                                <span class="post-nav">上一篇
+                                 <i class="fa fa-angle-left"></i>
+                                </span>
+                                <br>[转载]SpringMVC中使用Interceptor拦截器</span>
+                        </a>
+                    <a href="28.htm" rel="next">
+                            <span class="meta-nav">
+                                <span class="post-nav">下一篇
+                                 <i class="fa fa-angle-right"></i>
+                                </span>
+                                <br>SpringCloud 中使用 Eureka 和 Feign 实现增删改查</span>
+                        </a>
+                    <div class="clear"></div>
+            </nav>
+                <div class="scroll-comments"></div>
+            <div id="comments" class="comments-area">
+                <div id="respond" class="comment-respond">
+                    <h3 id="reply-title" class="comment-reply-title"><span id="reply-title-word">发表评论</span>
+                        <a rel="nofollow" id="cancel-comment-reply-link"
+                           href="27.htm#respond"
+                           style="">取消回复</a>
+                    </h3>
+                    <form id="comment_form" method="post">
+                        <p class="comment-form-comment">
+                            <textarea id="comment" name="commentContent" rows="4" tabindex="1" required></textarea>
+                        </p>
+                        <div id="comment-author-info">
+                            <input type="hidden" name="commentPid" value="0">
+                            <input type="hidden" name="commentPname" value="">
+                            <input type="hidden" name="commentRole" value="0">
+                                <p class="comment-form-author">
+                                    <label for="author_name">
+                                        昵称<span class="required">*</span>
+                                    </label>
+                                    <input type="text" name="commentAuthorName" id="author_name" class="" value=""
+                                           tabindex="2" required>
+                                </p>
+                                <p class="comment-form-email">
+                                    <label for="author_email">
+                                        邮箱<span class="required">*</span>
+                                    </label>
+                                    <input type="email" name="commentAuthorEmail" id="author_email" class="" value=""
+                                           tabindex="3" required>
+                                </p>
+                                <p class="comment-form-url">
+                                    <label for="author_url">网址</label>
+                                    <input type="url" name="commentAuthorUrl" id="author_url" class="" value=""
+                                           tabindex="4">
+                                </p>
+                            </div>
+                        <div class="clear"></div>
+                        <p class="form-submit">
+                            <input id="submit" name="submit" type="submit" tabindex="5" value="提交评论">
+                            <input type="hidden" name="commentArticleId"
+                                   value="27" id="article_id">
+                            <input type="hidden" name="commentPid" id="comment_pid" value="0">
+                        </p>
+                    </form>
+                </div>
+
+                <ol class="comment-list">
+                    </ol>
+            </div>
+                </main>
+        <!-- .site-main -->
+    </div>
+    <div id="sidebar" class="widget-area all-sidebar"
+     style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
+
+        <aside class="widget widget_search">
+            <div class="searchbar">
+                <form method="get" id="searchform1" action="http://localhost:8081/search">
+                    <span> <input type="text" value="" name="keywords" id="s1" placeholder="输入搜索内容" required="">
+                        <button type="submit" id="searchsubmit1">搜索</button>
+                    </span>
+                </form>
+            </div>
+            <div class="clear"></div>
+        </aside>
+        <aside class="widget hot_comment" >
+            <h3 class="widget-title">
+                <i class="fa fa-bars"></i>热评文章
+            </h3>
+            <div id="hot_comment_widget">
+                <ul>
+                    <li>
+                            <a href="17.htm" rel="bookmark" title=" (5条评论)">
+                                    java中ImageIcon路径问题</a>
+                        </li>
+                    <li>
+                            <a href="14.htm" rel="bookmark" title=" (3条评论)">
+                                    execute、executeUpdate、executeQuery三者的区别</a>
+                        </li>
+                    <li>
+                            <a href="13.htm" rel="bookmark" title=" (3条评论)">
+                                    sql语句分为三类(DML,DDL,DCL)-介绍</a>
+                        </li>
+                    <li>
+                            <a href="8.htm" rel="bookmark" title=" (3条评论)">
+                                    Mybatis高级映射多对多查询</a>
+                        </li>
+                    <li>
+                            <a href="11.htm" rel="bookmark" title=" (2条评论)">
+                                    Java如何让程序一直运行，不停止</a>
+                        </li>
+                    <li>
+                            <a href="9.htm" rel="bookmark" title=" (2条评论)">
+                                    Servlet 实现验证码</a>
+                        </li>
+                    <li>
+                            <a href="6.htm" rel="bookmark" title=" (2条评论)">
+                                    Hibernate 简单的CURD操作</a>
+                        </li>
+                    <li>
+                            <a href="2.htm" rel="bookmark" title=" (2条评论)">
+                                    springmvc 表单中文乱码解决方案</a>
+                        </li>
+                    </ul>
+            </div>
+            <div class="clear"></div>
+        </aside>
+        <aside class="widget">
+            <h3 class="widget-title">
+                <i class="fa fa-bars"></i>所有标签
+            </h3>
+            <div class="tagcloud">
+                <a href="../index.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Java</a>
+                <a href="../tag/2.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            算法</a>
+                <a href="../tag/3.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            数据结构</a>
+                <a href="../tag/4.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            C</a>
+                <a href="../tag/5.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            操作系统</a>
+                <a href="../tag/6.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            计算机网络</a>
+                <a href="../tag/8.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            面试题</a>
+                <a href="../tag/9.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            数据库</a>
+                <a href="../tag/10.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            MySQL</a>
+                <a href="../tag/11.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Spring</a>
+                <a href="../tag/12.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            SpringMVC</a>
+                <a href="../tag/13.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            MyBatis</a>
+                <a href="../tag/14.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            JVM</a>
+                <a href="../tag/15.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            设计模式</a>
+                <a href="../tag/16.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            网络编程</a>
+                <a href="../tag/17.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            IO</a>
+                <a href="../tag/18.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            JSP</a>
+                <a href="../tag/19.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Servlet</a>
+                <a href="../tag/20.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            JavaWeb</a>
+                <a href="../tag/21.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Hibernate</a>
+                <a href="../tag/22.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            SQL</a>
+                <a href="http://localhost:8081/tag/24.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Redis</a>
+                <a href="http://localhost:8081/tag/25.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            SPA</a>
+                <a href="http://localhost:8081/tag/26.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            SpringCloud</a>
+                <a href="http://localhost:8081/tag/27.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Dubbo</a>
+                <a href="http://localhost:8081/tag/28.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            EDAS</a>
+                <a href="http://localhost:8081/tag/29.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            MongoDB</a>
+                <a href="http://localhost:8081/tag/31.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            SpringBoot</a>
+                <a href="http://localhost:8081/tag/32.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            ElasticSearch</a>
+                <a href="http://localhost:8081/tag/33.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Docker</a>
+                <a href="http://localhost:8081/tag/34.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Jenkins</a>
+                <a href="http://localhost:8081/tag/35.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Vue</a>
+                <a href="http://localhost:8081/tag/36.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            IDEA</a>
+                <a href="http://localhost:8081/tag/37.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            Shiro</a>
+                <a href="http://localhost:8081/tag/38.htm"
+                       class="tag-link-129 tag-link-position-1"
+                       style="font-size: 14px;">
+                            RocketMQ</a>
+                <div class="clear"></div>
+            </div>
+            <div class="clear"></div>
+        </aside>
+        <aside id="random_post-7" class="widget random_post wow fadeInUp" data-wow-delay="0.3s">
+            <h3 class="widget-title">
+                <i class="fa fa-bars"></i>随机文章
+            </h3>
+            <div id="random_post_widget">
+                <ul>
+                    <li>
+                            <a href="http://localhost:8081/article/15.htm" rel="bookmark">
+                                    JSP 中 forward 转发 和 sendRedirect 重定向的区别</a>
+                        </li>
+                    <li>
+                            <a href="http://localhost:8081/article/13.htm" rel="bookmark">
+                                    sql语句分为三类(DML,DDL,DCL)-介绍</a>
+                        </li>
+                    <li>
+                            <a href="http://localhost:8081/article/9.htm" rel="bookmark">
+                                    Servlet 实现验证码</a>
+                        </li>
+                    <li>
+                            <a href="http://localhost:8081/article/28.htm" rel="bookmark">
+                                    SpringCloud 中使用 Eureka 和 Feign 实现增删改查</a>
+                        </li>
+                    <li>
+                            <a href="http://localhost:8081/article/6.htm" rel="bookmark">
+                                    Hibernate 简单的CURD操作</a>
+                        </li>
+                    <li>
+                            <a href="http://localhost:8081/article/10.htm" rel="bookmark">
+                                    Integer与int的种种比较你知道多少？</a>
+                        </li>
+                    <li>
+                            <a href="http://localhost:8081/article/27.htm" rel="bookmark">
+                                    SpringCloud 中使用 Eureka 和 Feign 实现增删改查</a>
+                        </li>
+                    <li>
+                            <a href="http://localhost:8081/article/2.htm" rel="bookmark">
+                                    springmvc 表单中文乱码解决方案</a>
+                        </li>
+                    </ul>
+            </div>
+            <div class="clear"></div>
+        </aside>
+        </div>
+</div>
+    <div class="clear"></div>
+    <footer id="colophon" class="site-footer" role="contentinfo">
+    <div class="site-info">
+        <p style="text-align: center;">Copyright © 2017
+            <a href="http://localhost:8081/default.html" target="_blank" rel="noopener noreferrer">风吟博客</a>
+            All rights reserved.
+            <a target="_blank" href="http://localhost:8081/map.htm" >
+                <span class="font-text">站点地图</span>
+            </a>
+        </p>
+    </div>
+    <!-- .site-info -->
+</footer><!-- .site-footer -->
+</div>
+
+<script src="../js/jquery.min.js"></script>
+<script src="../js/superfish.js"></script>
+<script src='../js/sticky.js'></script>
+<script src="../js/script.js"></script>
+<script src="../plugin/layui/layui.all.js"></script>
+
+
+<script src="../js/jquery.cookie.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            if ($('#author_name').val() == '') {
+                var author = localStorage.getItem("author");
+                $("#author_name").val(author == 'undefined' ? '' : author);
+            }
+            if ($('#author_email').val() == '') {
+                var email = localStorage.getItem("email");
+                $("#author_email").val(email == 'undefined' ? '' : email);
+            }
+            if ($('#author_url').val() == '') {
+                var url = localStorage.getItem("url");
+                $("#author_url").val(url == 'undefined' ? '' : url);
+            }
+        });
+
+        var articleId = $("#articleDetail").attr("data-id");
+        increaseViewCount(articleId);
+        layui.code({
+            elem: 'pre',//默认值为.layui-code
+            // skin: 'notepad', //如果要默认风格，不用设定该key。
+            about: false
+        });
+
+    </script>
+
+</body>
+</html>
